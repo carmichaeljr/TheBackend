@@ -1,5 +1,8 @@
 # TheBackend
-The backend that powers all of my C++ projects.
+The backend that powers all of my C++ projects. This project is aimed at providing a solid base to build applications off of in C++.
+
+### Note
+This project is just getting started, and as such is subject to change rapidly, or not at all.
 
 ### Orginization
 The projects root directory has a ```src``` and a ```debug``` folder. The program can be compiled in two different ways, one from the ```src``` folder 
