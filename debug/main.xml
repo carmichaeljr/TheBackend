@@ -1,0 +1,17 @@
+<CompileCmd cmd="g++">
+	<Arg addSpace=true>-static-libgcc</Arg>
+	<Arg addSpace=true>-static-libstdc++</Arg>
+	<Arg addSpace=true>-I .</Arg>
+	<Arg addSpace=true>-Wall -o</Arg>
+	<Arg>"bin/mainDebug"</Arg>
+	<Arg addSpace=true>debug/*.cpp</Arg>
+	<Arg addSpace=true>src/*.cpp</Arg>
+</CompileCmd>
+<ExecuteCmd>
+	<Arg>"./bin/mainDebug"</Arg>
+</ExecuteCmd>
+<LineCount>
+	<Files>*.hpp</Files>
+	<Files>*.cpp</Files>
+	<Files>*.tpp</Files>
+</LineCount>
