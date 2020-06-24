@@ -1,5 +1,6 @@
-#include <string>
 #include "HelperFunctions.hpp"
+
+const std::string HelperFunc::whitespace=" \t\n\r";
 
 void HelperFunc::removeTrailingNull(std::string &str){
 	if (str.size()>0 && str[str.size()-1]=='\0'){

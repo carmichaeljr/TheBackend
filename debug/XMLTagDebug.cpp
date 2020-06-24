@@ -38,8 +38,9 @@ bool XMLTagDebug::debugParseName(void){
 	bool rv=true;
 	XMLTag test;
 	test.parse("<Name>");
+	rv&=(test.getName()=="Name");
 
-	test.parse("<\"<>/' \">");
-	Print::objectMethodDebug(std::cout,"ParseName",rv);
+	//test.parse("<\"<>/' \">");
+	//Print::objectMethodDebug(std::cout,"ParseName",rv);
 	return rv;
 }

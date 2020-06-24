@@ -3,6 +3,10 @@
 
 #include <iostream>	//TODO - remove later
 
+const std::vector<std::string> inclusionTags={ "\"\"","''" };
+const std::vector<std::string> exclusionTags={ "/>" };
+const std::string splitTokens=" <>=";
+
 XMLTag::XMLTag(void){
 	//
 }
@@ -33,56 +37,57 @@ std::string XMLTag::getData(void) const {
 	return this->data;
 }
 
-//Idea:: token pairs
 void XMLTag::parse(const std::string &raw){
-	char tagType='s';
 	unsigned int prevIndex=0;
 	std::vector<std::string> segments;
 	for (unsigned int i=0; i<raw.size(); i++){
-		if (XMLTag::splitTokens.find(raw[i])!=std::string::npos && tagType=='s'){
-			segments.push_back(raw.substr(prevIndex+1,i));
-			prevIndex=i;
-		} else if (this->isOpeningInclusionTag(raw[i]) && tagType=='s'){
-			prevIndex=i;
-			tagType='i';
-		} else if (this->isOpeningExclusionTag(raw[i]) && tagType=='s'){
-			tagType='e';
-		} else if (this->isClosingInclusionTag(raw[i]) && tagType=='i'){
-			segment.push_back(raw.substr(prevIndex+1,i));
-			prevIndex=i;
-			tagType='s';
-		} else if (this->isClosingExclusionTag(raw[i]) && tagType=='e'){
-			prevIndex=i;
-			tagType='s';
+		if (XMLTag::splitTokens.find(raw[i])!=std::string::npos){
+			segments.push_back(raw.substr(prevIndex,i));
+			prevIndex=i+1;
+		} else if ((char nextTag=this->getPairedInclusionTag(raw[i]))!=0){
+			i=raw.find_first_of(nextTag,i);
+			segment.push_back(raw.substr(prevIndex,i));
+			prevIndex=i+1;
+		} else if ((char nextTag=this->getPairedExclusionTag(raw[i]))!=0){
+			i=raw.find_first_of(nextTag,i);
+			prevIndex=i+1;
 		}
-	}
-	//std::vector<int> tokenIndexes;
-	//this->populateTokenList(tokenIndexes,raw);
-	//for (int i=0; i<tokenIndexes.size(); i++){
-	//	std::cout << tokenIndexes[i] << ", ";
-	//}
-	//std::cout << std::endl;
 
-	//std::vector<std::string> strs;
-	//this->populateSubstings(strs,tokenIndexes);
+		//if (XMLTag::splitTokens.find(raw[i])!=std::string::npos && tagType=='s'){
+		//	segments.push_back(raw.substr(prevIndex,i));
+		//	prevIndex=i+1;
+		//} else if ((nextTag=this->isOpeningInclusionTag(raw[i])) && tagType=='s'){
+		//	prevIndex=i+1;
+		//	tagType='i';
+		//} else if (this->isOpeningExclusionTag(raw[i]) && tagType=='s'){
+		//	tagType='e';
+		//} else if (this->isClosingInclusionTag(raw[i]) && tagType=='i'){
+		//	segment.push_back(raw.substr(prevIndex+1,i));
+		//	prevIndex=i+1;
+		//	tagType='s';
+		//} else if (this->isClosingExclusionTag(raw[i]) && tagType=='e'){
+		//	prevIndex=i+1;
+		//	tagType='s';
+		//}
+	}
 }
 
-//void XMLTag::populateTokenList(std::vector<int> &tokenIndexes, const std::string &raw){
-//	bool insideQuotes=false;
-//	const std::string tokens=" \"'<>/=";
-//	for (unsigned int i=0; i<raw.size(); i++){
-//		if (tokens.find(raw[i])!=std::string::npos){
-//			if (!insideQuotes){
-//				tokenIndexes.push_back(i);
-//				insideQuotes=(raw[i]=='"' || raw[i]=='\'');
-//			} else if (raw[tokenIndexes.size()-1]==raw[i]){
-//				tokenIndexes.push_back(i);
-//				insideQuotes=false;
-//			}
-//		}
-//	}
-//}
-//
-//void XMLTag::populateSubstings(std::vector<std::string> &strs, std::vector<int> &tokenIndexes){
-//
-//}
+char XMLTag::getPairedInclusionTag(const char openTag) const {
+	char rv=0;
+	for (unsigned int i=0; i<XMLTag::inclusionTags.size() && rv==0; i++){
+		if (XMLTag::inclusionTags[i][0]==openTag){
+			rv=XMLTag::inclusionTags[i][1];
+		}
+	}
+	return rv;
+}
+
+char XMLTag::getPairedExclusionTag(const char openTag) const {
+	char rv=0;
+	for (unsigned int i=0; i<XMLTag::inclusionTags.size() && rv==0; i++){
+		if (XMLTag::exclusionTags[i][0]==openTag){
+			rv=XMLTag::exclusionTags[i][1];
+		}
+	}
+	return rv;
+}

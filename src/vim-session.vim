@@ -10,7 +10,7 @@ let s:cpo_save=&cpo
 set cpo&vim
 vmap gx <Plug>NetrwBrowseXVis
 nmap gx <Plug>NetrwBrowseX
-vnoremap <silent> <Plug>NetrwBrowseXVis :call netrw#BrowseXVis()<NL>nnoremap <silent> <Plug>NetrwBrowseX :call netrw#BrowseX(expand((exists("g:netrw_gx")? g:netrw_gx : '<cfile>')),netrw#CheckIfRemote())<NL>inoremap  u
+vnoremap <silent> <Plug>NetrwBrowseXVis :call netrw#BrowseXVis()
 nnoremap <silent> <Plug>NetrwBrowseX :call netrw#BrowseX(expand((exists("g:netrw_gx")? g:netrw_gx : '<cfile>')),netrw#CheckIfRemote())
 inoremap  u
 inoremap { {o}O
@@ -41,37 +41,31 @@ set ttimeout
 set ttimeoutlen=100
 set wildmenu
 set wildmode=list:longest,longest:full
+set window=64
 let s:so_save = &so | let s:siso_save = &siso | set so=0 siso=0
 let v:this_session=expand("<sfile>:p")
 silent only
 silent tabonly
-cd ~/Documents/Programming/C++Programs/XMLParser/src
+cd ~/Documents/Programming/C++Programs/TheBackend/src
 if expand('%') == '' && !&modified && line('$') <= 1 && getline(1) == ''
   let s:wipebuf = bufnr('%')
 endif
 set shortmess=aoO
-badd +1 main.cpp
-badd +1 Tree.tpp
-badd +1 Tree.hpp
-badd +1 TreeDebug.tpp
-badd +1 TreeIterator.tpp
-badd +1 File.cpp
-badd +28 File.hpp
-badd +1 FileDebug.cpp
-badd +1 FileIterator.cpp
-badd +1 Print.cpp
-badd +1 Pring.h
-badd +1 Print.hpp
-badd +1 HelperFunctions.c
-badd +1 HelperFunctions.cpp
-badd +1 HelperFunctions.hpp
-badd +1 Debug.cpp
-badd +1 Debug.hpp
-badd +4 XMLParser.hpp
-badd +10 XMLTag.hpp
-badd +1 XMLTag.cpp
+badd +0 XMLTag.cpp
+badd +0 XMLTag.hpp
+badd +0 Tree.tpp
+badd +0 Tree.hpp
+badd +0 TreeIterator.tpp
+badd +0 File.cpp
+badd +0 File.hpp
+badd +0 FileIterator.cpp
+badd +0 Print.cpp
+badd +0 Print.hpp
+badd +0 HelperFunctions.cpp
+badd +0 HelperFunctions.hpp
 argglobal
 silent! argdel *
+$argadd XMLTag.cpp
 set stal=2
 tabnew
 tabnew
@@ -93,8 +87,8 @@ set winminheight=0
 set winheight=1
 set winminwidth=0
 set winwidth=1
-exe 'vert 1resize ' . ((&columns * 95 + 96) / 192)
-exe 'vert 2resize ' . ((&columns * 96 + 96) / 192)
+exe 'vert 1resize ' . ((&columns * 96 + 96) / 192)
+exe 'vert 2resize ' . ((&columns * 95 + 96) / 192)
 argglobal
 setlocal keymap=
 setlocal noarabic
@@ -215,12 +209,12 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 31 - ((30 * winheight(0) + 31) / 62)
+let s:l = 9 - ((8 * winheight(0) + 31) / 62)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-31
-normal! 018|
+9
+normal! 015|
 wincmd w
 argglobal
 if bufexists('XMLTag.cpp') | buffer XMLTag.cpp | else | edit XMLTag.cpp | endif
@@ -343,16 +337,16 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 54 - ((30 * winheight(0) + 31) / 62)
+let s:l = 93 - ((60 * winheight(0) + 31) / 62)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-54
-normal! 036|
+93
+normal! 0
 wincmd w
 2wincmd w
-exe 'vert 1resize ' . ((&columns * 95 + 96) / 192)
-exe 'vert 2resize ' . ((&columns * 96 + 96) / 192)
+exe 'vert 1resize ' . ((&columns * 96 + 96) / 192)
+exe 'vert 2resize ' . ((&columns * 95 + 96) / 192)
 tabnext
 edit Tree.hpp
 set splitbelow splitright
@@ -367,8 +361,8 @@ set winminheight=0
 set winheight=1
 set winminwidth=0
 set winwidth=1
-exe 'vert 1resize ' . ((&columns * 135 + 96) / 192)
-exe 'vert 2resize ' . ((&columns * 56 + 96) / 192)
+exe 'vert 1resize ' . ((&columns * 95 + 96) / 192)
+exe 'vert 2resize ' . ((&columns * 96 + 96) / 192)
 argglobal
 setlocal keymap=
 setlocal noarabic
@@ -489,12 +483,12 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 2 - ((1 * winheight(0) + 31) / 62)
+let s:l = 1 - ((0 * winheight(0) + 31) / 62)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-2
-normal! 026|
+1
+normal! 0
 wincmd w
 argglobal
 if bufexists('Tree.tpp') | buffer Tree.tpp | else | edit Tree.tpp | endif
@@ -617,15 +611,15 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 3 - ((2 * winheight(0) + 31) / 62)
+let s:l = 1 - ((0 * winheight(0) + 31) / 62)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-3
+1
 normal! 0
 wincmd w
-exe 'vert 1resize ' . ((&columns * 135 + 96) / 192)
-exe 'vert 2resize ' . ((&columns * 56 + 96) / 192)
+exe 'vert 1resize ' . ((&columns * 95 + 96) / 192)
+exe 'vert 2resize ' . ((&columns * 96 + 96) / 192)
 tabnext
 edit TreeIterator.tpp
 set splitbelow splitright
@@ -898,12 +892,12 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 72 - ((52 * winheight(0) + 31) / 62)
+let s:l = 1 - ((0 * winheight(0) + 31) / 62)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-72
-normal! 015|
+1
+normal! 0
 wincmd w
 argglobal
 if bufexists('File.cpp') | buffer File.cpp | else | edit File.cpp | endif
@@ -1026,11 +1020,11 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 225 - ((15 * winheight(0) + 31) / 62)
+let s:l = 1 - ((0 * winheight(0) + 31) / 62)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-225
+1
 normal! 0
 wincmd w
 exe 'vert 1resize ' . ((&columns * 96 + 96) / 192)
@@ -1580,12 +1574,12 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 11 - ((9 * winheight(0) + 31) / 62)
+let s:l = 11 - ((10 * winheight(0) + 31) / 62)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
 11
-normal! 061|
+normal! 052|
 wincmd w
 argglobal
 if bufexists('HelperFunctions.cpp') | buffer HelperFunctions.cpp | else | edit HelperFunctions.cpp | endif
@@ -1708,11 +1702,11 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 4 - ((3 * winheight(0) + 31) / 62)
+let s:l = 1 - ((0 * winheight(0) + 31) / 62)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-4
+1
 normal! 0
 wincmd w
 exe 'vert 1resize ' . ((&columns * 96 + 96) / 192)

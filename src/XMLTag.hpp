@@ -17,18 +17,15 @@ class XMLTag {
 		void parse(const std::string &data);
 		//std::string getOpeningTag(void) const;
 		//std::string getClosingTag(void) const;
-		static const std::vector<std::string> inclusionTags={
-			"\"\"","''"
-		};
-		static const std::vector<std::string> exclusionTags={
-			"/>"
-		};
-		static const std::string splitTokens=" <>=";
 	private:
+		static const std::vector<std::string> inclusionTags;
+		static const std::vector<std::string> exclusionTags;
+		static const std::string splitTokens;
 		std::string name;
 		std::string data;
 		std::map<std::string,std::string> attributes;
-		//void populateTokenList(std::vector<int> &tokenIndexes, const std::string &raw);
+		char getPairedInclusionTag(const char openTag) const;
+		char getPairedExclusionTag(const char openTag) const;
 };
 
 #endif
