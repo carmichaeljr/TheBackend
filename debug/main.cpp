@@ -3,6 +3,9 @@
 #include "TreeDebug.hpp"
 #include "XMLTagDebug.hpp"
 
+//fix readme
+//add operator== to tree
+
 int main(int argc, char **argv){
 	bool successful=true;
 	successful&=HelperFuncDebug().run();
