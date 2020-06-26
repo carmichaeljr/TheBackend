@@ -10,15 +10,20 @@ class XMLTagDebug: public Debug {
 		XMLTagDebug(void);
 		bool debugClassMethods(void);
 		bool debugObjectMethods(void);
-		bool debugSetGetName(void);
-		bool debugSetGetData(void);
 		bool debugSetGetAttributes(void);
 		bool debugFind(void);
 		bool debugCount(void);
 		bool debugSwap(void);
+		bool debugErase(void);
+		bool debugClear(void);
+		bool debugEquals(void);
 		bool debugParseName(void);
-		bool debugParseErrors(void);
 		bool debugParseAttributes(void);
+		bool debugParseErrors(void);
+		bool debugParseBadFormatting(void);
+		bool debugGetOpeningTag(void);
+		bool debugGetClosingTag(void);
+		bool debugCopyConstructor(void);
 	private:
 		std::vector<std::string> correctKey;
 		std::vector<std::string> correctVal;

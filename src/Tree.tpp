@@ -23,6 +23,7 @@ template <typename T>
 Tree<T>& Tree<T>::operator=(const Tree<T> &other){
 	this->clear();
 	this->performDeepCopy(other);
+	return *this;
 }
 
 template <typename T>
@@ -32,7 +33,7 @@ Tree<T>& Tree<T>::operator=(Tree<T> &&other){
 		this->numElem=other.numElem;
 		this->headNode=other.headNode;
 		other.numElem=0;
-		other.headNode=0;
+		other.headNode=nullptr;
 	}
 	return *this;
 }
