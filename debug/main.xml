@@ -11,7 +11,10 @@
 	<Arg>"./bin/mainDebug"</Arg>
 </ExecuteCmd>
 <LineCount>
-	<Files>*.hpp</Files>
-	<Files>*.cpp</Files>
-	<Files>*.tpp</Files>
+	<Files>debug/*.hpp</Files>
+	<Files>debug/*.cpp</Files>
+	<Files>debug/*.tpp</Files>
+	<Files>src/*.hpp</Files>
+	<Files>src/*.cpp</Files>
+	<Files>src/*.tpp</Files>
 </LineCount>

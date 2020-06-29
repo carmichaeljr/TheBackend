@@ -2,7 +2,6 @@
 #define GENERIC_TREE_CLASS
 
 #include <string>
-#include <memory>
 #include <vector>
 #include <utility>
 

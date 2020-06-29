@@ -3,8 +3,6 @@
 #include "XMLTag.hpp"
 #include "HelperFunctions.hpp"
 
-#include <iostream>	//TODO - remove later
-
 const std::vector<std::string> XMLTag::inclusionTags={ "\"\"","''" };
 const std::vector<std::string> XMLTag::exclusionTags={ "/>" };
 const std::string XMLTag::splitTags=" <>=";
@@ -23,8 +21,16 @@ XMLTag::XMLTag(const std::string &nName, const std::string &nData):
 	//
 }
 
-//copy constructor
-//move constructor
+XMLTag::XMLTag(const XMLTag &other):
+	name(other.name),
+	data(other.data),
+	attributes(other.attributes) {
+	//
+}
+
+XMLTag::XMLTag(const XMLTag &&other){
+	*this=std::move(other);
+}
 
 XMLTag& XMLTag::operator=(const XMLTag &other){
 	this->clear();
@@ -34,7 +40,15 @@ XMLTag& XMLTag::operator=(const XMLTag &other){
 	return *this;
 }
 
-//move assignment operator
+XMLTag& XMLTag::operator=(const XMLTag &&other){
+	if (this!=&other){
+		this->clear();
+		this->name=other.name;
+		this->data=other.data;
+		this->attributes=other.attributes;
+	}
+	return *this;
+}
 
 void XMLTag::emplace(const std::string &key, const std::string &val){
 	this->attributes.emplace(key,val);
@@ -83,9 +97,7 @@ void XMLTag::clear(void){
 int XMLTag::parse(const std::string &raw){
 	std::vector<std::string> segments;
 	int rv=this->populateSegments(segments,raw);
-	//std::cout << "rv populate segments: " << rv << std::endl;
 	rv|=((rv!=XMLTag::invalidTag)? this->setDataFromSegments(segments): rv);
-	//std::cout << "rv set data: " << rv << std::endl;
 	return rv;
 }
 
@@ -138,9 +150,9 @@ int XMLTag::populateSegments(std::vector<std::string> &segments, const std::stri
 	}
 	rv|=((segments.size()==0)? XMLTag::invalidTag: rv);
 
-	for (int i=0; i<segments.size(); i++){
-		std::cout << "Segment: " << i << ": [" << segments[i]  << "]" << std::endl;
-	}
+	//for (int i=0; i<segments.size(); i++){
+	//	std::cout << "Segment: " << i << ": [" << segments[i]  << "]" << std::endl;
+	//}
 	return rv;
 }
 

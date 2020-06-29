@@ -5,9 +5,6 @@
 #include <map>
 #include <string>
 
-//TODO -
-//the big 5
-
 class XMLTag {
 	friend bool operator==(const XMLTag &rhs, const XMLTag &lhs);
 	friend bool operator!=(const XMLTag &rhs, const XMLTag &lhs);
@@ -17,7 +14,10 @@ class XMLTag {
 		XMLTag(void);
 		explicit XMLTag(const std::string &nName);
 		XMLTag(const std::string &nName, const std::string &nData);
+		XMLTag(const XMLTag &other);
+		XMLTag(const XMLTag &&other);
 		XMLTag& operator=(const XMLTag &other);
+		XMLTag& operator=(const XMLTag &&other);
 		void setName(const std::string &nName);
 		std::string& getName(void);
 		void setData(const std::string &nData);

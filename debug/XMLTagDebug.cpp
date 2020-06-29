@@ -37,7 +37,7 @@ bool XMLTagDebug::debugSetGetAttributes(void){
 	int i=0;
 	for (std::map<std::string,std::string>::iterator iter=test.begin(); iter!=test.end(); iter++, i++){
 		rv&=(iter->first==correctKey[i] && iter->second==correctVal[i]);
-		std::cout << "Pair: " << iter->first << " " << iter->second << std::endl;
+		//std::cout << "Pair: " << iter->first << " " << iter->second << std::endl;
 	}
 	Print::objectMethodDebug(std::cout,"Get/Set Attributes",rv);
 	return rv;
