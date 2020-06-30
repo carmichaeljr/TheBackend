@@ -7,6 +7,10 @@
 
 template <typename T>
 class Tree {
+	public:
+		static const int mvUp=0;
+		static const int mvDown=1;
+		static const int mvNext=2;
 	private:
 		class Node {
 			public:
@@ -64,9 +68,6 @@ class Tree {
 		Tree<T>::iterator erase(const Tree<T>::iterator &start);
 		void clear(void);
 		~Tree(void);
-		static const int mvUp=0;
-		static const int mvDown=1;
-		static const int mvNext=2;
 	private:
 		int numElem=0;
 		Tree<T>::Node *headNode=nullptr;

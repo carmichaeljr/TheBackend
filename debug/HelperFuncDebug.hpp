@@ -1,7 +1,7 @@
 #ifndef HELPER_FUNC_DEBUG_CLASS
 #define HELPER_FUNC_DEBUG_CLASS
 
-#include "Debug.hpp"
+#include "debug/Debug.hpp"
 
 class HelperFuncDebug: public Debug {
 	public:

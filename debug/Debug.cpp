@@ -1,4 +1,4 @@
-#include "Debug.hpp"
+#include "debug/Debug.hpp"
 #include "src/Print.hpp"
 
 Debug::Debug(const std::string &className): cName(className) {

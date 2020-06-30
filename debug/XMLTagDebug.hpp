@@ -2,7 +2,7 @@
 #define XML_TAG_DEBUG
 
 #include <vector>
-#include "Debug.hpp"
+#include "debug/Debug.hpp"
 #include "src/XMLTag.hpp"
 
 class XMLTagDebug: public Debug {

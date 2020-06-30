@@ -1,7 +1,7 @@
 #include <utility>
 #include <sstream>
-#include "XMLTag.hpp"
-#include "HelperFunctions.hpp"
+#include "src/XMLTag.hpp"
+#include "src/HelperFunctions.hpp"
 
 const std::vector<std::string> XMLTag::inclusionTags={ "\"\"","''" };
 const std::vector<std::string> XMLTag::exclusionTags={ "/>" };

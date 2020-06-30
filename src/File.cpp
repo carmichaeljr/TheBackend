@@ -5,8 +5,8 @@
 #include <unistd.h>
 #include <sys/stat.h>
 //C++ headers
-#include "File.hpp"
-#include "HelperFunctions.hpp"
+#include "src/File.hpp"
+#include "src/HelperFunctions.hpp"
 
 #if OS==WINDOWS
 	#include <windows.h>

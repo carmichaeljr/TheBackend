@@ -1,5 +1,5 @@
 #include <sstream>
-#include "XMLTagDebug.hpp"
+#include "debug/XMLTagDebug.hpp"
 #include "src/Print.hpp"
 
 XMLTagDebug::XMLTagDebug(void): Debug("XMLTag") {

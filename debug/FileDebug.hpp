@@ -4,7 +4,7 @@
 #include <vector>
 #include <string>
 #include <sstream>
-#include "Debug.hpp"
+#include "debug/Debug.hpp"
 
 class FileDebug: public Debug {
 	public:

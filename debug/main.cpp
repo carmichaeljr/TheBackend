@@ -1,14 +1,13 @@
-#include "HelperFuncDebug.hpp"
-#include "FileDebug.hpp"
-#include "TreeDebug.hpp"
-#include "XMLTagDebug.hpp"
-
-//fix readme
-//add operator== to tree
+#include "debug/HelperFuncDebug.hpp"
+#include "debug/TokenizerDebug.hpp"
+#include "debug/FileDebug.hpp"
+#include "debug/TreeDebug.hpp"
+#include "debug/XMLTagDebug.hpp"
 
 int main(int argc, char **argv){
 	bool successful=true;
 	successful&=HelperFuncDebug().run();
+	successful&=TokenizerDebug().run();
 	successful&=TreeDebug().run();
 	successful&=FileDebug().run();
 	successful&=XMLTagDebug().run();

@@ -1,4 +1,4 @@
-#include "FileDebug.hpp"
+#include "debug/FileDebug.hpp"
 #include "src/File.hpp"
 #include "src/Print.hpp"
 

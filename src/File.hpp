@@ -28,6 +28,13 @@
 
 class File {
 	public:
+		static const char pathDelim=
+#if OS==WINDOWS
+		'\\';
+#else
+		'/';
+#endif
+	public:
 		class iterator {
 			public:
 				std::string line;
@@ -68,12 +75,6 @@ class File {
 		static std::string getPathToApplication(void);
 		//static std::vector<std::string> getFilesInDir(const std::string &str);
 		static std::string getAbsPath(const std::string &relPath);
-		static const char pathDelim=
-#if OS==WINDOWS
-		'\\';
-#else
-		'/';
-#endif
 	protected:
 		std::string path;
 	private:

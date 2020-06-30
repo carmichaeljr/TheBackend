@@ -2,7 +2,7 @@
 #define TREE_DEBUG_CLASS
 
 #include <string>
-#include "Debug.hpp"
+#include "debug/Debug.hpp"
 #include "src/Tree.hpp"
 
 class TreeDebug: public Debug {

@@ -1,4 +1,4 @@
-#include "HelperFunctions.hpp"
+#include "src/HelperFunctions.hpp"
 
 const std::string HelperFunc::whitespace=" \t\n\r";
 

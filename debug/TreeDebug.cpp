@@ -1,4 +1,4 @@
-#include "TreeDebug.hpp"
+#include "debug/TreeDebug.hpp"
 #include "src/Print.hpp"
 
 TreeDebug::TreeDebug(void): Debug("Tree") {

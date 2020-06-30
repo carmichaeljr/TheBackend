@@ -1,5 +1,5 @@
 #include <string>
-#include "HelperFuncDebug.hpp"
+#include "debug/HelperFuncDebug.hpp"
 #include "src/Print.hpp"
 #include "src/HelperFunctions.hpp"
 
