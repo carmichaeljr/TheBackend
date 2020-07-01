@@ -1,4 +1,3 @@
-#include <vector>
 #include "debug/TokenizerDebug.hpp"
 #include "src/Print.hpp"
 
@@ -28,7 +27,8 @@ bool TokenizerDebug::debugObjectMethods(void){
 	return (this->debugAddSplitTokens() &&
 		this->debugAddInclusionTokens() &&
 		this->debugAddExclusionTokens() &&
-		this->debugParse());
+		this->debugParse() &&
+		this->debugVectorInterface());
 }
 
 bool TokenizerDebug::debugAddSplitTokens(void){
@@ -73,7 +73,37 @@ bool TokenizerDebug::debugParse(void){
 	Tokenizer test;
 	this->initilizeTokenizer(test);
 	test.parse(this->parseStr.str());
+	rv&=test.good();
+	rv&=(test.rdstate()==Tokenizer::parseSuccess);
+	for (unsigned int i=0; i<test.size(); i++){
+		rv&=(test[i]==this->parseStrNames[i]);
+	}
 	Print::objectMethodDebug(std::cout,"Parse",rv);
+	return rv;
+}
+
+bool TokenizerDebug::debugVectorInterface(void){
+	bool rv=true;
+	Tokenizer test;
+	this->initilizeTokenizer(test);
+	test.parse(this->parseStr.str());
+	rv&=(test.at(0)==this->parseStrNames[0]);
+	rv&=(test[1]==this->parseStrNames[1]);
+	rv&=(test.front()==this->parseStrNames[0]);
+	rv&=(test.back()==this->parseStrNames.back());
+	rv&=(test.size()==this->parseStrNames.size());
+	rv&=(!test.empty());
+	int i=0;
+	for (std::vector<std::string>::iterator iter=test.begin(); iter!=test.end(); iter++, i++){
+		rv&=(*iter==this->parseStrNames[i]);
+	}
+	i=0;
+	for (std::vector<std::string>::const_iterator iter=test.begin(); iter!=test.end(); iter++, i++){
+		rv&=(*iter==this->parseStrNames[i]);
+	}
+	test.clear();
+	rv&=(test.size()==0);
+	Print::objectMethodDebug(std::cout,"VectorInterface",rv);
 	return rv;
 }
 

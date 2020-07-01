@@ -1,6 +1,7 @@
 #ifndef TOKENIZER_DEBUG_CLASS
 #define TOKENIZER_DEBUG_CLASS
 
+#include <vector>
 #include <string>
 #include <sstream>
 #include "debug/Debug.hpp"
@@ -15,6 +16,7 @@ class TokenizerDebug: public Debug {
 		bool debugAddInclusionTokens(void);
 		bool debugAddExclusionTokens(void);
 		bool debugParse(void);
+		bool debugVectorInterface(void);
 	private:
 		std::string splitTokens;
 		std::string inclusionTokens;

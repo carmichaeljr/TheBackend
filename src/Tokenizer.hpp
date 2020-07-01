@@ -17,6 +17,25 @@ class Tokenizer {
 		void addExclusionTokens(const std::string &tokenPairs);
 		const std::vector<std::string>& getExclusionTokens(void) const;
 		void parse(const std::string &raw);
+		std::string& at(const int index);
+		const std::string& at(const int index) const;
+		std::string& operator[](const int index);
+		const std::string& operator[](const int index) const;
+		std::string& front(void);
+		const std::string& front(void) const;
+		std::string& back(void);
+		const std::string& back(void) const;
+		std::vector<std::string>::iterator begin(void);
+		const std::vector<std::string>::const_iterator begin(void) const;
+		std::vector<std::string>::iterator end(void);
+		const std::vector<std::string>::const_iterator end(void) const;
+		std::vector<std::string>::const_iterator cbegin(void);
+		std::vector<std::string>::const_iterator cend(void);
+		bool empty(void) const;
+		unsigned int size(void) const;
+		void clear(void);
+		bool good(void) const;
+		int rdstate(void) const;
 	private:
 		int error=Tokenizer::parseSuccess;
 		std::vector<std::string> segments;

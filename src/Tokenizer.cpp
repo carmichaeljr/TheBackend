@@ -1,8 +1,6 @@
 #include <algorithm>
 #include "src/Tokenizer.hpp"
 
-#include <iostream>	//TODO - remove
-
 Tokenizer::Tokenizer(void){
 	//
 }
@@ -58,9 +56,86 @@ void Tokenizer::parse(const std::string &raw){
 	}
 	this->addSegment(raw,prevIndex,raw.size());
 
-	for (int i=0; i<segments.size(); i++){
-		std::cout << "Segment: " << i << ": [" << segments[i]  << "]" << std::endl;
-	}
+	//for (int i=0; i<segments.size(); i++){
+	//	std::cout << "Segment: " << i << ": [" << segments[i]  << "]" << std::endl;
+	//}
+}
+
+std::string& Tokenizer::at(const int index){
+	return this->segments.at(index);
+}
+
+const std::string& Tokenizer::at(const int index) const {
+	return this->segments.at(index);
+}
+
+std::string& Tokenizer::operator[](const int index){
+	return this->segments[index];
+}
+
+const std::string& Tokenizer::operator[](const int index) const {
+	return this->segments[index];
+}
+
+std::string& Tokenizer::front(void){
+	return this->segments.front();
+}
+
+const std::string& Tokenizer::front(void) const {
+	return this->segments.front();
+}
+
+std::string& Tokenizer::back(void){
+	return this->segments.back();
+}
+
+const std::string& Tokenizer::back(void) const {
+	return this->segments.back();
+}
+
+std::vector<std::string>::iterator Tokenizer::begin(void){
+	return this->segments.begin();
+}
+
+const std::vector<std::string>::const_iterator Tokenizer::begin(void) const {
+	return this->segments.begin();
+}
+
+std::vector<std::string>::iterator Tokenizer::end(void){
+	return this->segments.end();
+}
+
+const std::vector<std::string>::const_iterator Tokenizer::end(void) const {
+	return this->segments.end();
+}
+
+std::vector<std::string>::const_iterator Tokenizer::cbegin(void){
+	return this->segments.cbegin();
+}
+
+std::vector<std::string>::const_iterator Tokenizer::cend(void){
+	return this->segments.cend();
+}
+
+bool Tokenizer::empty(void) const {
+	return this->segments.empty();
+}
+
+unsigned int Tokenizer::size(void) const {
+	return this->segments.size();
+}
+
+void Tokenizer::clear(void){
+	this->segments.clear();
+	this->error=Tokenizer::parseSuccess;
+}
+
+bool Tokenizer::good(void) const {
+	return (this->error==Tokenizer::parseSuccess);
+}
+
+int Tokenizer::rdstate(void) const {
+	return this->error;
 }
 
 void Tokenizer::addTokenPairs(std::vector<std::string> &place, const std::string &raw){
