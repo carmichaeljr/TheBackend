@@ -151,6 +151,7 @@ Tree<T>::~Tree(void){
 	this->clear();
 }
 
+//Private Methods===============================================================
 template <typename T>
 void Tree<T>::setHeadNode(const T &data){
 	this->headNode=this->createNode(data);

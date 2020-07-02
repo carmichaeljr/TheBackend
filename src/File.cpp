@@ -16,6 +16,29 @@ File::File(const std::string &path){
 	this->setPath(path);
 }
 
+File::File(const File &other):
+	path(other.path) {
+	//
+}
+
+File::File(const File &&other){
+	*this=std::move(other);
+}
+
+File& File::operator=(const File &other){
+	this->clear();
+	this->path=other.path;
+	return *this;
+}
+
+File& File::operator=(const File &&other){
+	if (this!=&other){
+		this->clear();
+		this->path=other.path;
+	}
+	return *this;
+}
+
 void File::setPath(const std::string &path){
 	this->path=File::getAbsPath(path);
 }
@@ -144,19 +167,7 @@ void File::clear(void){
 	}
 }
 
-bool File::operator==(const File &other) const {
-	bool rv=true;
-	std::ifstream thisFile(this->path), otherFile(other.getPath());
-	for (char thisChar=' ', otherChar=' ';
-		!otherFile.fail() && !thisFile.fail() && !otherFile.eof() && !thisFile.eof() && rv;
-		otherFile >> otherChar, thisFile >> thisChar){
-		rv=((otherChar==thisChar) && (otherFile.eof()==thisFile.eof()));
-	}
-	thisFile.close();
-	otherFile.close();
-	return rv;
-}
-
+//Private Methods===============================================================
 //First: inclusive, second: exclusive
 std::pair<unsigned int,unsigned int> File::getDriveIndexes(void) const {
 	return { 0, this->path.find(':') };
@@ -195,6 +206,26 @@ bool File::modifyFilePath(const std::string &newPath, const bool makeCopy){
 	return rv;
 }
 
+//Friend methods================================================================
+bool operator==(const File &rhs, const File &lhs){
+	bool rv=(rhs.path==lhs.path);
+	if (!rv){
+		rv=true;
+		std::ifstream rhsFile(rhs.path), lhsFile(lhs.getPath());
+		for (char rhsChar=' ', lhsChar=' ';
+			!lhsFile.fail() && !rhsFile.fail() && !lhsFile.eof() && !rhsFile.eof() && rv;
+			lhsFile >> lhsChar, rhsFile >> rhsChar){
+			rv=((lhsChar==rhsChar) && (lhsFile.eof()==rhsFile.eof()));
+		}
+		rhsFile.close();
+		lhsFile.close();
+	}
+	return rv;
+}
+
+bool operator!=(const File &rhs, const File &lhs){
+	return !(rhs==lhs);
+}
 
 //Class Methods=================================================================
 #if OS==UNIX

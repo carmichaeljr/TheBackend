@@ -5,14 +5,11 @@ File::iterator::iterator(void){
 }
 
 File::iterator::iterator(const std::string &path){
-	this->file=std::shared_ptr<std::ifstream>(new std::ifstream(path));
+	this->path=path;
+	this->file=std::shared_ptr<std::ifstream>(new std::ifstream(this->path));
 	if (!this->file->fail()){
 		getline(*this->file,this->line);
 	}
-}
-
-bool File::iterator::isFileNull(void) const {
-	return (this->file==nullptr);
 }
 
 File::iterator& File::iterator::operator++(const int num){
@@ -24,6 +21,7 @@ File::iterator& File::iterator::operator++(const int num){
 		this->file->close();
 		this->file=nullptr;
 	}
+	this->lineNum++;
 	return *this;
 }
 
@@ -35,10 +33,27 @@ File::iterator& File::iterator::operator+=(const int num){
 }
 
 bool File::iterator::operator==(const File::iterator &other) const {
-	return (this->file==nullptr && other.isFileNull());
+	return ((this->file==nullptr && other.file==nullptr) ||
+		(this->path==other.path && this->lineNum==other.lineNum));
 }
 bool File::iterator::operator!=(const File::iterator &other) const {
 	return !this->operator==(other);
+}
+
+std::string& File::iterator::operator*(void){
+	return this->line;
+}
+
+const std::string& File::iterator::operator*(void) const {
+	return this->line;
+}
+
+std::string* File::iterator::operator->(void){
+	return (&this->line);
+}
+
+const std::string* File::iterator::operator->(void) const {
+	return (&this->line);
 }
 
 File::iterator::~iterator(void){

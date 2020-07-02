@@ -29,6 +29,7 @@ class FileDebug: public Debug {
 		bool debugIterator(void);
 		bool debugWrite(void);
 		bool debugAppend(void);
+		bool debugCopyConstructor(void);
 		std::stringstream debugFile;
 		std::stringstream copyFile;
 		std::stringstream equalsFile;

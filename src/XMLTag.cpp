@@ -146,6 +146,7 @@ void XMLTag::clear(void){
 	this->name="";
 }
 
+//Private Methods===============================================================
 int XMLTag::setDataFromTokens(const Tokenizer &tokens){
 	if (tokens.size()>0){
 		this->name=tokens[0];
@@ -178,6 +179,7 @@ bool XMLTag::containsTag(const std::string &data) const {
 	return rv;
 }
 
+//Friend Methods================================================================
 bool operator==(const XMLTag &rhs, const XMLTag &lhs){
 	return (rhs.name==lhs.name && rhs.data==lhs.data &&
 		rhs.attributes==lhs.attributes);

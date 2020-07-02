@@ -27,6 +27,8 @@
 #include <fstream>
 
 class File {
+	friend bool operator==(const File &rhs, const File &lhs);
+	friend bool operator!=(const File &rhs, const File &lhs);
 	public:
 		static const char pathDelim=
 #if OS==WINDOWS
@@ -37,20 +39,29 @@ class File {
 	public:
 		class iterator {
 			public:
-				std::string line;
 				iterator(void);
 				explicit iterator(const std::string &path);
 				iterator& operator++(const int num);
 				iterator& operator+=(const int num);
 				bool operator==(const iterator &other) const;
 				bool operator!=(const iterator &other) const;
-				bool isFileNull(void) const;
+				std::string& operator*(void);
+				const std::string& operator*(void) const;
+				std::string* operator->(void);
+				const std::string* operator->(void) const;
 				~iterator(void);
 			private:
+				unsigned int lineNum=0;
+				std::string line;
+				std::string path;
 				std::shared_ptr<std::ifstream> file;
 		};
 
 		explicit File(const std::string &file);
+		File(const File &other);
+		File(const File &&other);
+		File& operator=(const File &other);
+		File& operator=(const File &&other);
 		void setPath(const std::string &path);
 		const std::string& getPath(void) const;
 		std::vector<std::string> getDirList(void) const;
@@ -67,7 +78,6 @@ class File {
 		void write(const std::string &data);
 		void append(const std::string &data);
 		void clear(void);
-		bool operator==(const File &other) const;
 		static bool fileExists(const std::string &file);
 		static bool remove(const std::string &file);
 		static std::string getCwd(void);

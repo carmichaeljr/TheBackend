@@ -68,7 +68,8 @@ bool FileDebug::debugObjectMethods(void){
 		this->debugClear() &&
 		this->debugIterator() &&
 		this->debugWrite() &&
-		this->debugAppend());
+		this->debugAppend() &&
+		this->debugCopyConstructor());
 }
 
 bool FileDebug::debugSetPath(void){
@@ -201,10 +202,16 @@ bool FileDebug::debugIterator(void){
 	std::stringstream temp;
 	for (File::iterator iter=testFile.begin(); iter!=testFile.end(); iter++, i++){
 		temp << i+1;
-		rv&=(iter.line==temp.str());
+		rv&=(*iter==temp.str());
+		rv&=(iter->size()==temp.str().size());
 		temp.str(std::string());
 	}
 	rv&=(i==5);
+	File::iterator iter1=testFile.begin();
+	File::iterator iter2=testFile.begin();
+	iter1+=2;
+	iter2+=2;
+	rv&=(iter1==iter2);
 	Print::objectMethodDebug(std::cout,"Iterator",rv);
 	return rv;
 }
@@ -220,9 +227,9 @@ bool FileDebug::debugWrite(void){
 	testFile.write(data);
 	for (File::iterator iter=testFile.begin(); iter!=testFile.end(); iter++, i++){
 		switch (i){
-			case 0: rv&=(iter.line=="one"); break;
-			case 1: rv&=(iter.line=="two"); break;
-			case 2: rv&=(iter.line=="three"); break;
+			case 0: rv&=(*iter=="one"); break;
+			case 1: rv&=(*iter=="two"); break;
+			case 2: rv&=(*iter=="three"); break;
 			default: break;
 		}
 	}
@@ -243,9 +250,9 @@ bool FileDebug::debugAppend(void){
 	testFile.append(data);
 	for (File::iterator iter=testFile.begin(); iter!=testFile.end(); iter++, i++){
 		switch (i){
-			case 6: rv&=(iter.line=="one"); break;
-			case 7: rv&=(iter.line=="two"); break;
-			case 8: rv&=(iter.line=="three"); break;
+			case 6: rv&=(*iter=="one"); break;
+			case 7: rv&=(*iter=="two"); break;
+			case 8: rv&=(*iter=="three"); break;
 			default: break;
 		}
 	}
@@ -255,3 +262,11 @@ bool FileDebug::debugAppend(void){
 	return rv;
 }
 
+bool FileDebug::debugCopyConstructor(void){
+	bool rv=true;
+	File testFile(this->debugFile.str());
+	File testFile2=testFile;
+	rv&=(testFile==testFile2);
+	Print::objectMethodDebug(std::cout,"CopyConstructor",rv);
+	return rv;
+}

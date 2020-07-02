@@ -34,6 +34,26 @@ typename Tree<T>::iterator& Tree<T>::iterator::operator++(const int num){
 	return *this;
 }
 
+//Do not attempt to access when iterator==end(), undefined behavior, similar to std::vector
+template <typename T>
+T& Tree<T>::iterator::operator*(void){
+	return this->node->data;
+}
+template <typename T>
+T& Tree<T>::iterator::operator*(void) const {
+	return this->node->data;
+}
+
+template <typename T>
+T* Tree<T>::iterator::operator->(void){
+	return (&this->node->data);
+}
+template <typename T>
+T* Tree<T>::iterator::operator->(void) const {
+	return (&this->node->data);
+}
+
+//Private Methods===============================================================
 template <typename T>
 constexpr bool Tree<T>::iterator::hasChildren(typename Tree<T>::Node *node) const {
 	return (node->child!=nullptr);
@@ -65,21 +85,3 @@ void Tree<T>::iterator::move(const int dir){
 	}
 }
 
-//Do not attempt to access when iterator==end(), undefined behavior, similar to std::vector
-template <typename T>
-T& Tree<T>::iterator::operator*(void){
-	return this->node->data;
-}
-template <typename T>
-T& Tree<T>::iterator::operator*(void) const {
-	return this->node->data;
-}
-
-template <typename T>
-T* Tree<T>::iterator::operator->(void){
-	return (&this->node->data);
-}
-template <typename T>
-T* Tree<T>::iterator::operator->(void) const {
-	return (&this->node->data);
-}

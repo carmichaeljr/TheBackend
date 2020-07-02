@@ -179,6 +179,7 @@ void Tokenizer::clear(void){
 	this->error=Tokenizer::parseSuccess;
 }
 
+//Private Methods===============================================================
 void Tokenizer::addTokenPairs(std::vector<std::string> &place, const std::string &raw){
 	for (unsigned int i=0; i<raw.size(); i+=2){
 		std::string str=raw.substr(i,2);
