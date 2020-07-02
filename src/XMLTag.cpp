@@ -3,9 +3,9 @@
 #include "src/XMLTag.hpp"
 #include "src/HelperFunctions.hpp"
 
-const std::vector<std::string> XMLTag::inclusionTags={ "\"\"","''" };
-const std::vector<std::string> XMLTag::exclusionTags={ "/>" };
-const std::string XMLTag::splitTags=" <>=";
+const std::string XMLTag::inclusionTokens="\"\"''";
+const std::string XMLTag::exclusionTokens="/>";
+const std::string XMLTag::splitTokens=" <>=";
 
 XMLTag::XMLTag(void){
 	//
@@ -50,54 +50,14 @@ XMLTag& XMLTag::operator=(const XMLTag &&other){
 	return *this;
 }
 
-void XMLTag::emplace(const std::string &key, const std::string &val){
-	this->attributes.emplace(key,val);
-}
-
-std::string& XMLTag::operator[](const std::string &attrName){
-	return this->attributes[attrName];
-}
-
-int XMLTag::size(void) const {
-	return this->attributes.size();
-}
-
-std::map<std::string,std::string>::iterator XMLTag::begin(void){
-	return this->attributes.begin();
-}
-
-std::map<std::string,std::string>::iterator XMLTag::end(void){
-	return this->attributes.end();
-}
-
-std::map<std::string,std::string>::iterator XMLTag::find(const std::string &name){
-	return this->attributes.find(name);
-}
-
-int XMLTag::count(const std::string &key) const {
-	return this->attributes.count(key);
-}
-
-void XMLTag::swap(XMLTag &other){
-	std::swap(other.name,this->name);
-	std::swap(other.data,this->data);
-	this->attributes.swap(other.attributes);
-}
-
-void XMLTag::erase(const std::string &attr){
-	this->attributes.erase(attr);	
-}
-
-void XMLTag::clear(void){
-	this->attributes.clear();
-	this->data="";
-	this->name="";
-}
-
 int XMLTag::parse(const std::string &raw){
-	std::vector<std::string> segments;
-	int rv=this->populateSegments(segments,raw);
-	rv|=((rv!=XMLTag::invalidTag)? this->setDataFromSegments(segments): rv);
+	Tokenizer tokenizer;
+	tokenizer.addSplitTokens(XMLTag::splitTokens);
+	tokenizer.addInclusionTokens(XMLTag::inclusionTokens);
+	tokenizer.addExclusionTokens(XMLTag::exclusionTokens);
+	tokenizer.parse(raw);
+	int rv=this->setDataFromTokens(tokenizer);
+	rv|=tokenizer.rdstate();
 	return rv;
 }
 
@@ -126,71 +86,74 @@ std::string XMLTag::getClosingTag(void) const {
 	return rv.str();
 }
 
-int XMLTag::populateSegments(std::vector<std::string> &segments, const std::string &raw) const {
-	int rv=XMLTag::parseSuccess;
-	char nextTag=0;
-	unsigned int prevIndex=0;
-	for (unsigned int i=0; i<raw.size(); ((i!=std::string::npos)? i++: i)){
-		if (XMLTag::splitTags.find(raw[i])!=std::string::npos){
-			this->addSegment(segments,raw,prevIndex,i);
-			prevIndex=i+1;
-		} else if ((nextTag=this->getPairedInclusionTag(raw[i]))!=0){
-			this->addSegment(segments,raw,prevIndex,i);
-			prevIndex=i+1;
-			i=raw.find_first_of(nextTag,i+1);
-			this->addSegment(segments,raw,prevIndex,i);
-			prevIndex=i+1;
-			rv|=((i==std::string::npos)? XMLTag::unballancedTag: rv);
-		} else if ((nextTag=this->getPairedExclusionTag(raw[i]))!=0){
-			this->addSegment(segments,raw,prevIndex,i);
-			i=raw.find_first_of(nextTag,i+1);
-			prevIndex=i+1;
-			rv|=((i==std::string::npos)? XMLTag::unballancedTag: rv);
-		}
-	}
-	rv|=((segments.size()==0)? XMLTag::invalidTag: rv);
-
-	//for (int i=0; i<segments.size(); i++){
-	//	std::cout << "Segment: " << i << ": [" << segments[i]  << "]" << std::endl;
-	//}
-	return rv;
+void XMLTag::emplace(const std::string &key, const std::string &val){
+	this->attributes.emplace(key,val);
 }
 
-char XMLTag::getPairedInclusionTag(const char openTag) const {
-	char rv=0;
-	for (unsigned int i=0; i<XMLTag::inclusionTags.size() && rv==0; i++){
-		if (XMLTag::inclusionTags[i][0]==openTag){
-			rv=XMLTag::inclusionTags[i][1];
-		}
-	}
-	return rv;
+std::string& XMLTag::operator[](const std::string &attrName){
+	return this->attributes[attrName];
 }
 
-char XMLTag::getPairedExclusionTag(const char openTag) const {
-	char rv=0;
-	for (unsigned int i=0; i<XMLTag::exclusionTags.size() && rv==0; i++){
-		if (XMLTag::exclusionTags[i][0]==openTag){
-			rv=XMLTag::exclusionTags[i][1];
-		}
-	}
-	return rv;
+int XMLTag::size(void) const {
+	return this->attributes.size();
 }
 
-//start inclusive, end exclusive
-void XMLTag::addSegment(std::vector<std::string> &segments, const std::string &raw, const int start, const int end) const {
-	if (end-start>1){
-		segments.push_back(raw.substr(start,end-start));
-	}
+std::map<std::string,std::string>::iterator XMLTag::begin(void){
+	return this->attributes.begin();
 }
 
-int XMLTag::setDataFromSegments(const std::vector<std::string> &segments){
-	if (segments.size()>0){
-		this->name=segments[0];
+const std::map<std::string,std::string>::const_iterator XMLTag::begin(void) const {
+	return this->attributes.begin();
+}
+
+std::map<std::string,std::string>::iterator XMLTag::end(void){
+	return this->attributes.end();
+}
+
+const std::map<std::string,std::string>::const_iterator XMLTag::end(void) const {
+	return this->attributes.end();
+}
+
+std::map<std::string,std::string>::const_iterator XMLTag::cbegin(void){
+	return this->attributes.cbegin();
+}
+
+std::map<std::string,std::string>::const_iterator XMLTag::cend(void){
+	return this->attributes.cend();
+}
+
+std::map<std::string,std::string>::iterator XMLTag::find(const std::string &name){
+	return this->attributes.find(name);
+}
+
+int XMLTag::count(const std::string &key) const {
+	return this->attributes.count(key);
+}
+
+void XMLTag::swap(XMLTag &other){
+	std::swap(other.name,this->name);
+	std::swap(other.data,this->data);
+	this->attributes.swap(other.attributes);
+}
+
+void XMLTag::erase(const std::string &attr){
+	this->attributes.erase(attr);	
+}
+
+void XMLTag::clear(void){
+	this->attributes.clear();
+	this->data="";
+	this->name="";
+}
+
+int XMLTag::setDataFromTokens(const Tokenizer &tokens){
+	if (tokens.size()>0){
+		this->name=tokens[0];
 	}
-	for (unsigned int i=2; i<segments.size(); i+=2){
-		this->attributes[segments[i-1]]=segments[i];
+	for (unsigned int i=2; i<tokens.size(); i+=2){
+		this->attributes[tokens[i-1]]=tokens[i];
 	}
-	return ((segments.size()>1 && segments.size()%2==0)? XMLTag::unballancedAttrs: XMLTag::parseSuccess);
+	return ((tokens.size()>1 && tokens.size()%2==0)? XMLTag::unballancedAttrs: XMLTag::parseSuccess);
 }
 
 void XMLTag::getParseableSegment(std::string &buf, const std::string &data) const {
@@ -205,12 +168,12 @@ void XMLTag::getParseableSegment(std::string &buf, const std::string &data) cons
 }
 
 bool XMLTag::containsTag(const std::string &data) const {
-	bool rv=(data.find_first_of(XMLTag::splitTags)!=std::string::npos);
-	for (unsigned int i=0; i<XMLTag::inclusionTags.size() && !rv; i++){
-		rv&=(data.find_first_of(XMLTag::inclusionTags[i])!=std::string::npos);
+	bool rv=(data.find_first_of(XMLTag::splitTokens)!=std::string::npos);
+	for (unsigned int i=0; i<XMLTag::inclusionTokens.size() && !rv; i+=2){
+		rv&=(data.find_first_of(XMLTag::inclusionTokens[i])!=std::string::npos);
 	}
-	for (unsigned int i=0; i<XMLTag::exclusionTags.size() && !rv; i++){
-		rv&=(data.find_first_of(XMLTag::exclusionTags[i])!=std::string::npos);
+	for (unsigned int i=0; i<XMLTag::exclusionTokens.size() && !rv; i+=2){
+		rv&=(data.find_first_of(XMLTag::exclusionTokens[i])!=std::string::npos);
 	}
 	return rv;
 }

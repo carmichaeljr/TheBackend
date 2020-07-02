@@ -17,6 +17,7 @@ class TokenizerDebug: public Debug {
 		bool debugAddExclusionTokens(void);
 		bool debugParse(void);
 		bool debugVectorInterface(void);
+		bool debugCopyConstructor(void);
 	private:
 		std::string splitTokens;
 		std::string inclusionTokens;

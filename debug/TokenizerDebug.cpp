@@ -28,7 +28,8 @@ bool TokenizerDebug::debugObjectMethods(void){
 		this->debugAddInclusionTokens() &&
 		this->debugAddExclusionTokens() &&
 		this->debugParse() &&
-		this->debugVectorInterface());
+		this->debugVectorInterface() &&
+		this->debugCopyConstructor());
 }
 
 bool TokenizerDebug::debugAddSplitTokens(void){
@@ -104,6 +105,19 @@ bool TokenizerDebug::debugVectorInterface(void){
 	test.clear();
 	rv&=(test.size()==0);
 	Print::objectMethodDebug(std::cout,"VectorInterface",rv);
+	return rv;
+}
+
+bool TokenizerDebug::debugCopyConstructor(void){
+	bool rv=true;
+	Tokenizer test;
+	this->initilizeTokenizer(test);
+	test.parse(this->parseStr.str());
+	Tokenizer test2=test;
+	for (unsigned int i=0; i<test.size(); i++){
+		rv&=(test2[i]==this->parseStrNames[i]);
+	}
+	Print::objectMethodDebug(std::cout,"CopyConstructor",rv);
 	return rv;
 }
 

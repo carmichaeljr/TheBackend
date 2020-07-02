@@ -7,11 +7,7 @@
 
 template <typename T>
 class Tree {
-	public:
-		static const int mvUp=0;
-		static const int mvDown=1;
-		static const int mvNext=2;
-	private:
+	private:	//Needs to be placed at top for reference later in class
 		class Node {
 			public:
 				Node(void);
@@ -21,6 +17,10 @@ class Tree {
 				Tree<T>::Node *child;
 				Tree<T>::Node *next;
 		};
+	public:
+		static const int mvUp=0;
+		static const int mvDown=1;
+		static const int mvNext=2;
 	public:
 		class iterator {
 			friend class Tree;

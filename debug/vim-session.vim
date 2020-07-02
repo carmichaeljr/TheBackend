@@ -41,7 +41,6 @@ set ttimeout
 set ttimeoutlen=100
 set wildmenu
 set wildmode=list:longest,longest:full
-set window=64
 let s:so_save = &so | let s:siso_save = &siso | set so=0 siso=0
 let v:this_session=expand("<sfile>:p")
 silent only
@@ -51,20 +50,20 @@ if expand('%') == '' && !&modified && line('$') <= 1 && getline(1) == ''
   let s:wipebuf = bufnr('%')
 endif
 set shortmess=aoO
-badd +0 XMLTagDebug.cpp
-badd +0 XMLTagDebug.hpp
-badd +0 TreeDebug.cpp
-badd +0 TreeDebug.hpp
-badd +0 FileDebug.cpp
-badd +0 FileDebug.hpp
-badd +0 HelperFuncDebug.cpp
-badd +0 HelperFuncDebug.hpp
-badd +0 Debug.cpp
-badd +0 Debug.hpp
-badd +0 main.cpp
-badd +1 main.xml
-badd +0 TokenizerDebug.cpp
-badd +0 TokenizerDebug.hpp
+badd +1 XMLTagDebug.cpp
+badd +5 XMLTagDebug.hpp
+badd +1 TreeDebug.cpp
+badd +5 TreeDebug.hpp
+badd +1 FileDebug.cpp
+badd +7 FileDebug.hpp
+badd +1 HelperFuncDebug.cpp
+badd +4 HelperFuncDebug.hpp
+badd +1 Debug.cpp
+badd +2 Debug.hpp
+badd +1 main.cpp
+badd +18 main.xml
+badd +1 TokenizerDebug.cpp
+badd +19 TokenizerDebug.hpp
 argglobal
 silent! argdel *
 $argadd XMLTagDebug.cpp
@@ -339,12 +338,12 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 1 - ((0 * winheight(0) + 31) / 62)
+let s:l = 161 - ((15 * winheight(0) + 31) / 62)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-1
-normal! 0
+161
+normal! 09|
 wincmd w
 exe 'vert 1resize ' . ((&columns * 96 + 96) / 192)
 exe 'vert 2resize ' . ((&columns * 95 + 96) / 192)
@@ -1030,11 +1029,11 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 19 - ((18 * winheight(0) + 31) / 62)
+let s:l = 20 - ((19 * winheight(0) + 31) / 62)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-19
+20
 normal! 048|
 wincmd w
 argglobal
@@ -1158,14 +1157,13 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 1 - ((0 * winheight(0) + 31) / 62)
+let s:l = 32 - ((12 * winheight(0) + 31) / 62)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-1
-normal! 0
+32
+normal! 044|
 wincmd w
-2wincmd w
 exe 'vert 1resize ' . ((&columns * 96 + 96) / 192)
 exe 'vert 2resize ' . ((&columns * 95 + 96) / 192)
 tabnext

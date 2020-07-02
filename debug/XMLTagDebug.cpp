@@ -156,13 +156,11 @@ bool XMLTagDebug::debugParseAttributes(void){
 bool XMLTagDebug::debugParseErrors(void){
 	bool rv=true;
 	XMLTag test;
-	rv&=(test.parse("hello")==XMLTag::invalidTag);
+
+	rv&=(test.parse("<'unbalanced>")==XMLTag::unballancedTag);
 	rv&=(test.name.size()==0);
 
-	rv&=(test.parse("<'unbalanced>")==(XMLTag::unballancedTag | XMLTag::invalidTag));
-	rv&=(test.name.size()==0);
-
-	rv&=(test.parse("<Name unbalancedAttr=data test/>")==(XMLTag::unballancedAttrs));
+	rv&=(test.parse("<Name unbalancedAttr=data test/>")==XMLTag::unballancedAttrs);
 	rv&=(test.name=="Name");
 
 	Print::objectMethodDebug(std::cout,"ParseErrors",rv);

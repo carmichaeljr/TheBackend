@@ -10,6 +10,10 @@ class Tokenizer {
 		static const int unballancedTokens=1;
 	public:
 		Tokenizer(void);
+		Tokenizer(const Tokenizer &other);
+		Tokenizer(const Tokenizer &&other);
+		Tokenizer& operator=(const Tokenizer &other);
+		Tokenizer& operator=(const Tokenizer &&other);
 		void addSplitTokens(const std::string &tokens);
 		const std::string& getSplitTokens(void) const;
 		void addInclusionTokens(const std::string &tokenPairs);
@@ -17,6 +21,9 @@ class Tokenizer {
 		void addExclusionTokens(const std::string &tokenPairs);
 		const std::vector<std::string>& getExclusionTokens(void) const;
 		void parse(const std::string &raw);
+		bool good(void) const;
+		int rdstate(void) const;
+	public:	//vector interface methods
 		std::string& at(const int index);
 		const std::string& at(const int index) const;
 		std::string& operator[](const int index);
@@ -34,8 +41,6 @@ class Tokenizer {
 		bool empty(void) const;
 		unsigned int size(void) const;
 		void clear(void);
-		bool good(void) const;
-		int rdstate(void) const;
 	private:
 		int error=Tokenizer::parseSuccess;
 		std::vector<std::string> segments;

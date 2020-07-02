@@ -41,7 +41,6 @@ set ttimeout
 set ttimeoutlen=100
 set wildmenu
 set wildmode=list:longest,longest:full
-set window=64
 let s:so_save = &so | let s:siso_save = &siso | set so=0 siso=0
 let v:this_session=expand("<sfile>:p")
 silent only
@@ -51,20 +50,20 @@ if expand('%') == '' && !&modified && line('$') <= 1 && getline(1) == ''
   let s:wipebuf = bufnr('%')
 endif
 set shortmess=aoO
-badd +0 XMLTag.cpp
-badd +0 XMLTag.hpp
-badd +0 Tree.tpp
-badd +0 Tree.hpp
-badd +0 TreeIterator.tpp
-badd +0 File.cpp
-badd +0 File.hpp
-badd +0 FileIterator.cpp
-badd +0 Print.cpp
-badd +0 Print.hpp
-badd +0 HelperFunctions.cpp
-badd +0 HelperFunctions.hpp
-badd +0 Tokenizer.cpp
-badd +0 Tokenizer.hpp
+badd +1 XMLTag.cpp
+badd +38 XMLTag.hpp
+badd +1 Tree.tpp
+badd +1 Tree.hpp
+badd +1 TreeIterator.tpp
+badd +1 File.cpp
+badd +48 File.hpp
+badd +1 FileIterator.cpp
+badd +1 Print.cpp
+badd +19 Print.hpp
+badd +1 HelperFunctions.cpp
+badd +7 HelperFunctions.hpp
+badd +1 Tokenizer.cpp
+badd +38 Tokenizer.hpp
 argglobal
 silent! argdel *
 $argadd XMLTag.cpp
@@ -212,12 +211,12 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 38 - ((36 * winheight(0) + 31) / 62)
+let s:l = 33 - ((32 * winheight(0) + 31) / 62)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-38
-normal! 0
+33
+normal! 017|
 wincmd w
 argglobal
 if bufexists('XMLTag.cpp') | buffer XMLTag.cpp | else | edit XMLTag.cpp | endif
@@ -340,12 +339,12 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 4 - ((3 * winheight(0) + 31) / 62)
+let s:l = 42 - ((41 * winheight(0) + 31) / 62)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-4
-normal! 014|
+42
+normal! 0
 wincmd w
 exe 'vert 1resize ' . ((&columns * 96 + 96) / 192)
 exe 'vert 2resize ' . ((&columns * 95 + 96) / 192)
@@ -485,12 +484,12 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 1 - ((0 * winheight(0) + 31) / 62)
+let s:l = 10 - ((9 * winheight(0) + 31) / 62)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-1
-normal! 0
+10
+normal! 080|
 wincmd w
 argglobal
 if bufexists('Tree.tpp') | buffer Tree.tpp | else | edit Tree.tpp | endif
@@ -1303,12 +1302,12 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 38 - ((37 * winheight(0) + 31) / 62)
+let s:l = 14 - ((13 * winheight(0) + 31) / 62)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-38
-normal! 040|
+14
+normal! 051|
 wincmd w
 argglobal
 if bufexists('Tokenizer.cpp') | buffer Tokenizer.cpp | else | edit Tokenizer.cpp | endif
@@ -1436,7 +1435,7 @@ if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
 1
-normal! 0
+normal! 018|
 wincmd w
 2wincmd w
 exe 'vert 1resize ' . ((&columns * 96 + 96) / 192)

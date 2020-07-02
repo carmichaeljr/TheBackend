@@ -1,8 +1,42 @@
+#include <utility>
 #include <algorithm>
 #include "src/Tokenizer.hpp"
 
 Tokenizer::Tokenizer(void){
 	//
+}
+
+Tokenizer::Tokenizer(const Tokenizer &other):
+	error(other.error),
+	segments(other.segments),
+	inclusionTokens(other.inclusionTokens),
+	exclusionTokens(other.exclusionTokens),
+	splitTokens(other.splitTokens) {
+	//
+}
+
+Tokenizer::Tokenizer(const Tokenizer &&other){
+	*this=std::move(other);
+}
+
+Tokenizer& Tokenizer::operator=(const Tokenizer &other){
+	this->clear();
+	this->segments=other.segments;
+	this->inclusionTokens=other.inclusionTokens;
+	this->exclusionTokens=other.exclusionTokens;
+	this->splitTokens=other.splitTokens;
+	return *this;
+}
+
+Tokenizer& Tokenizer::operator=(const Tokenizer &&other){
+	if (this!=&other){
+		this->clear();
+		this->segments=other.segments;
+		this->inclusionTokens=other.inclusionTokens;
+		this->exclusionTokens=other.exclusionTokens;
+		this->splitTokens=other.splitTokens;
+	}
+	return *this;
 }
 
 void Tokenizer::addSplitTokens(const std::string &tokens){
@@ -44,21 +78,36 @@ void Tokenizer::parse(const std::string &raw){
 			this->addSegment(raw,prevIndex,i);
 			prevIndex=i+1;
 			i=raw.find_first_of(nextTag,i+1);
-			this->addSegment(raw,prevIndex,i);
-			prevIndex=i+1;
-			this->error|=((i==std::string::npos)? Tokenizer::unballancedTokens: this->error);
+			if (i!=std::string::npos){
+				this->addSegment(raw,prevIndex,i);
+				prevIndex=i+1;
+			} else {
+				this->error|=Tokenizer::unballancedTokens;
+			}
 		} else if ((nextTag=this->getPairedToken(this->exclusionTokens,raw[i]))!=0){
 			this->addSegment(raw,prevIndex,i);
 			i=raw.find_first_of(nextTag,i+1);
 			prevIndex=i+1;
-			this->error|=((i==std::string::npos)? Tokenizer::unballancedTokens: this->error);
+			if (i==std::string::npos){
+				this->error|=Tokenizer::unballancedTokens;
+			}
 		}
 	}
-	this->addSegment(raw,prevIndex,raw.size());
+	if (this->error==Tokenizer::parseSuccess){
+		this->addSegment(raw,prevIndex,raw.size());
+	}
 
 	//for (int i=0; i<segments.size(); i++){
 	//	std::cout << "Segment: " << i << ": [" << segments[i]  << "]" << std::endl;
 	//}
+}
+
+bool Tokenizer::good(void) const {
+	return (this->error==Tokenizer::parseSuccess);
+}
+
+int Tokenizer::rdstate(void) const {
+	return this->error;
 }
 
 std::string& Tokenizer::at(const int index){
@@ -128,14 +177,6 @@ unsigned int Tokenizer::size(void) const {
 void Tokenizer::clear(void){
 	this->segments.clear();
 	this->error=Tokenizer::parseSuccess;
-}
-
-bool Tokenizer::good(void) const {
-	return (this->error==Tokenizer::parseSuccess);
-}
-
-int Tokenizer::rdstate(void) const {
-	return this->error;
 }
 
 void Tokenizer::addTokenPairs(std::vector<std::string> &place, const std::string &raw){
