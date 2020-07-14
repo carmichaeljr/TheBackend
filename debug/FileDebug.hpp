@@ -30,6 +30,7 @@ class FileDebug: public Debug {
 		bool debugWrite(void);
 		bool debugAppend(void);
 		bool debugCopyConstructor(void);
+	protected:
 		std::stringstream debugFile;
 		std::stringstream copyFile;
 		std::stringstream equalsFile;

@@ -15,7 +15,7 @@ class Print {
 		static void objectDebug(std::ostream &os, const std::string &className, const bool success);
 		static void objectMethodDebug(std::ostream &os, const std::string &methodName, const bool success);
 		static bool yesOrNoPrompt(std::ostream &os, std::istream &is, const std::string &question);
-	private:
+	protected:
 		static int indentLevel;
 		static int spacesPerIndent;
 };

@@ -45,12 +45,13 @@ class XMLTag {
 		void swap(XMLTag &other);
 		void erase(const std::string &attr);
 		void clear(void);
+	protected:
+		std::map<std::string,std::string> attributes;
 	private:
 		static const std::string splitTokens;
 		static const std::string inclusionTokens;
 		static const std::string exclusionTokens;
 	private:
-		std::map<std::string,std::string> attributes;
 		int setDataFromTokens(const Tokenizer &tokens);
 		void getParseableSegment(std::string &buf, const std::string &data) const;
 		bool containsTag(const std::string &data) const;

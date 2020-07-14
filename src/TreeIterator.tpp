@@ -1,19 +1,19 @@
-template <typename T>
-Tree<T>::iterator::iterator(void){
+template <typename iterVal>
+Tree<T>::iteratorBase::iteratorBase(void){
 	this->prevAction=Tree<T>::mvDown;
 	this->revisit=false;
 	this->node=nullptr;
 }
 
-template <typename T>
-Tree<T>::iterator::iterator(typename Tree<T>::Node *headNode, bool revisit){
+template <typename iterVal>
+Tree<T>::iteratorBase::iteratorBase(typename Tree<T>::Node *headNode, bool revisit){
 	this->prevAction=Tree<T>::mvDown;
 	this->revisit=revisit;
 	this->node=headNode;
 }
 
-template <typename T>
-typename Tree<T>::iterator& Tree<T>::iterator::operator++(const int num){
+template <typename iterVal>
+typename Tree<T>::iteratorBase<iterVal>& Tree<T>::iteratorBase::operator++(const int num){
 	if (this->node==nullptr){
 		this->prevAction=-1;
 	} else if (this->hasChildren(this->node)){
@@ -34,43 +34,42 @@ typename Tree<T>::iterator& Tree<T>::iterator::operator++(const int num){
 	return *this;
 }
 
-//Do not attempt to access when iterator==end(), undefined behavior, similar to std::vector
-template <typename T>
-T& Tree<T>::iterator::operator*(void){
+template <typename iterVal>
+iterVal& Tree<T>::iteratorBase::operator*(void){
 	return this->node->data;
 }
-template <typename T>
-T& Tree<T>::iterator::operator*(void) const {
-	return this->node->data;
-}
+//template <typename iterVal>
+//T& Tree<T>::iterator::operator*(void) const {
+//	return this->node->data;
+//}
 
-template <typename T>
-T* Tree<T>::iterator::operator->(void){
+template <typename iterVal>
+iterVal* Tree<T>::iteratorBase::operator->(void){
 	return (&this->node->data);
 }
-template <typename T>
-T* Tree<T>::iterator::operator->(void) const {
-	return (&this->node->data);
-}
+//template <typename iterVal>
+//T* Tree<T>::iterator::operator->(void) const {
+//	return (&this->node->data);
+//}
 
 //Private Methods===============================================================
-template <typename T>
-constexpr bool Tree<T>::iterator::hasChildren(typename Tree<T>::Node *node) const {
+template <typename iterVal>
+constexpr bool Tree<T>::iteratorBase::hasChildren(typename Tree<T>::Node *node) const {
 	return (node->child!=nullptr);
 }
 
-template <typename T>
-constexpr bool Tree<T>::iterator::hasNext(typename Tree<T>::Node *node) const {
+template <typename iterVal>
+constexpr bool Tree<T>::iteratorBase::hasNext(typename Tree<T>::Node *node) const {
 	return (node->next!=nullptr);
 }
 
-template <typename T>
-constexpr bool Tree<T>::iterator::hasParent(typename Tree<T>::Node *node) const {
+template <typename iterVal>
+constexpr bool Tree<T>::iteratorBase::hasParent(typename Tree<T>::Node *node) const {
 	return (node->parent!=nullptr);
 }
 
-template <typename T>
-void Tree<T>::iterator::move(const int dir){
+template <typename iterVal>
+void Tree<T>::iteratorBase::move(const int dir){
 	switch(dir){
 		case (Tree<T>::mvNext): this->node=this->node->next; 
 					this->prevAction=Tree<T>::mvNext; break;

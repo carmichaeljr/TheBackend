@@ -22,31 +22,35 @@ class Tree {
 		static const int mvDown=1;
 		static const int mvNext=2;
 	public:
-		class iterator {
+		using nodeType=Tree<T>::Node;
+		template <typename iterVal>
+		class iteratorBase {
 			friend class Tree;
-			friend bool operator==(const Tree<T>::iterator &a, const Tree<T>::iterator &b){
+			friend bool operator==(const iteratorBase<iterVal> &a, const iteratorBase<iterVal> &b){
 				return (a.node==b.node);
 			}
-			friend bool operator!=(const Tree<T>::iterator &a, const Tree<T>::iterator &b){
+			friend bool operator!=(const iteratorBase<iterVal> &a, const iteratorBase<iterVal> &b){
 				return (a.node!=b.node);
 			}
 			public:
-				iterator(void);
-				iterator(Tree<T>::Node *headNode, bool revisit=false);
-				Tree<T>::iterator& operator++(const int num);
-				T& operator*(void);
-				T& operator*(void) const;
-				T* operator->(void);
-				T* operator->(void) const;
+				iteratorBase(void);
+				iteratorBase(nodeType *headNode, bool revisit=false);
+				iteratorBase<iterVal>& operator++(const int num);
+				iterVal& operator*(void);
+				//const T& operator*(void) const;
+				iterVal* operator->(void);
+				//const T* operator->(void) const;
 			private:
 				bool revisit;
 				int prevAction;
-				Tree<T>::Node *node;
-				constexpr bool hasChildren(Tree<T>::Node *node) const;
-				constexpr bool hasNext(Tree<T>::Node *node) const;
-				constexpr bool hasParent(Tree<T>::Node *node) const;
+				nodeType *node;
+				constexpr bool hasChildren(nodeType *node) const;
+				constexpr bool hasNext(nodeType *node) const;
+				constexpr bool hasParent(nodeType *node) const;
 				void move(const int dir);
 		};
+		typedef iteratorBase<T> iterator;
+		typedef iteratorBase<const T> const_iterator;
 
 		Tree(void);
 		explicit Tree(const T &data);
@@ -68,9 +72,10 @@ class Tree {
 		Tree<T>::iterator erase(const Tree<T>::iterator &start);
 		void clear(void);
 		~Tree(void);
-	private:
+	protected:
 		int numElem=0;
 		Tree<T>::Node *headNode=nullptr;
+	private:
 		void setHeadNode(const T &data);
 		constexpr Tree<T>::Node* createNode(const T &data) const;
 		void deleteNode(Tree<T>::Node *node);

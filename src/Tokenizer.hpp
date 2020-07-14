@@ -41,12 +41,13 @@ class Tokenizer {
 		bool empty(void) const;
 		unsigned int size(void) const;
 		void clear(void);
-	private:
+	protected:
 		int error=Tokenizer::parseSuccess;
 		std::vector<std::string> segments;
 		std::vector<std::string> inclusionTokens;
 		std::vector<std::string> exclusionTokens;
 		std::string splitTokens;
+	private:
 		void addTokenPairs(std::vector<std::string> &place, const std::string &raw);
 		char getPairedToken(const std::vector<std::string> &src, const char openToken) const;
 		void addSegment(const std::string &raw, const int start, const int end);

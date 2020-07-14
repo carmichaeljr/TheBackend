@@ -108,12 +108,12 @@ std::string File::getName(void) const {
 	return rv;
 }
 
-File::iterator File::begin(void) const {
-	return File::iterator(this->path);
+File::const_iterator File::begin(void) const {
+	return File::const_iterator(this->path);
 }
 
-File::iterator File::end(void) const {
-	return File::iterator();
+File::const_iterator File::end(void) const {
+	return File::const_iterator();
 }
 
 unsigned int File::getNumLines(void) const {

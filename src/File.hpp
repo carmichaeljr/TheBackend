@@ -37,20 +37,18 @@ class File {
 		'/';
 #endif
 	public:
-		class iterator {
+		class const_iterator {
 			public:
-				iterator(void);
-				explicit iterator(const std::string &path);
-				iterator& operator++(const int num);
-				iterator& operator+=(const int num);
-				bool operator==(const iterator &other) const;
-				bool operator!=(const iterator &other) const;
-				std::string& operator*(void);
+				const_iterator(void);
+				explicit const_iterator(const std::string &path);
+				const_iterator& operator++(const int num);
+				const_iterator& operator+=(const int num);
+				bool operator==(const const_iterator &other) const;
+				bool operator!=(const const_iterator &other) const;
 				const std::string& operator*(void) const;
-				std::string* operator->(void);
 				const std::string* operator->(void) const;
-				~iterator(void);
-			private:
+				~const_iterator(void);
+			protected:
 				unsigned int lineNum=0;
 				std::string line;
 				std::string path;
@@ -71,8 +69,8 @@ class File {
 		std::string getExtension(void) const;
 		bool changeName(const std::string &newName, const bool makeCopy=true);
 		std::string getName(void) const;
-		File::iterator begin(void) const;
-		File::iterator end(void) const;
+		File::const_iterator begin(void) const;
+		File::const_iterator end(void) const;
 		unsigned int getNumLines(void) const;
 		void copy(const File &other) const;
 		void write(const std::string &data);

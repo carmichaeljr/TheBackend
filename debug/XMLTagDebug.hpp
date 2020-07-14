@@ -24,7 +24,7 @@ class XMLTagDebug: public Debug {
 		bool debugGetOpeningTag(void);
 		bool debugGetClosingTag(void);
 		bool debugCopyConstructor(void);
-	private:
+	protected:
 		std::vector<std::string> correctKey;
 		std::vector<std::string> correctVal;
 		void initilizeBlankTag(XMLTag &tag) const;

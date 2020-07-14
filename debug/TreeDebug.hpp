@@ -20,7 +20,7 @@ class TreeDebug: public Debug {
 		bool debugCopyConstructor(void);
 		bool debugFind(void);
 		bool debugCount(void);
-	private:
+	protected:
 		Tree<int> createDebugTestTree(void) const;
 		bool debugEraseHelp(Tree<int> &test, std::vector<int> &correct, int delNum, int next);
 };

@@ -200,15 +200,15 @@ bool FileDebug::debugIterator(void){
 	File testFile(this->debugFile.str());
 	int i=0;
 	std::stringstream temp;
-	for (File::iterator iter=testFile.begin(); iter!=testFile.end(); iter++, i++){
+	for (File::const_iterator iter=testFile.begin(); iter!=testFile.end(); iter++, i++){
 		temp << i+1;
 		rv&=(*iter==temp.str());
 		rv&=(iter->size()==temp.str().size());
 		temp.str(std::string());
 	}
 	rv&=(i==5);
-	File::iterator iter1=testFile.begin();
-	File::iterator iter2=testFile.begin();
+	File::const_iterator iter1=testFile.begin();
+	File::const_iterator iter2=testFile.begin();
 	iter1+=2;
 	iter2+=2;
 	rv&=(iter1==iter2);
@@ -225,7 +225,7 @@ bool FileDebug::debugWrite(void){
 
 	rv&=testFile.changeExtension(newExt);
 	testFile.write(data);
-	for (File::iterator iter=testFile.begin(); iter!=testFile.end(); iter++, i++){
+	for (File::const_iterator iter=testFile.begin(); iter!=testFile.end(); iter++, i++){
 		switch (i){
 			case 0: rv&=(*iter=="one"); break;
 			case 1: rv&=(*iter=="two"); break;
@@ -248,7 +248,7 @@ bool FileDebug::debugAppend(void){
 
 	rv&=testFile.changeExtension(newExt);
 	testFile.append(data);
-	for (File::iterator iter=testFile.begin(); iter!=testFile.end(); iter++, i++){
+	for (File::const_iterator iter=testFile.begin(); iter!=testFile.end(); iter++, i++){
 		switch (i){
 			case 6: rv&=(*iter=="one"); break;
 			case 7: rv&=(*iter=="two"); break;

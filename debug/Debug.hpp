@@ -10,7 +10,7 @@ class Debug {
 		bool run(void);
 		virtual bool debugClassMethods(void)=0;
 		virtual bool debugObjectMethods(void)=0;
-	private:
+	protected:
 		std::string cName;
 };
 
