@@ -19,7 +19,8 @@ bool TreeDebug::debugObjectMethods(void){
 		this->debugClear() &&
 		this->debugCopyConstructor() &&
 		this->debugFind() &&
-		this->debugCount());
+		this->debugCount() &&
+		this->debugEquals());
 }
 
 bool TreeDebug::debugConstructor(void){
@@ -173,6 +174,17 @@ bool TreeDebug::debugCount(void){
 	rv&=(test.count(5)==1);
 	rv&=(test.count(12)==2);
 	Print::objectMethodDebug(std::cout,"Count",rv);
+	return rv;
+}
+
+bool TreeDebug::debugEquals(void){
+	bool rv=true;
+	Tree<int> test=this->createDebugTestTree();
+	Tree<int> test2=this->createDebugTestTree();
+	rv&=(test==test2);
+	test2.emplace(20);
+	rv&=(test!=test2);
+	Print::objectMethodDebug(std::cout,"Equals",rv);
 	return rv;
 }
 

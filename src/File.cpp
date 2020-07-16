@@ -108,11 +108,11 @@ std::string File::getName(void) const {
 	return rv;
 }
 
-File::const_iterator File::begin(void) const {
+File::const_iterator File::cbegin(void) const {
 	return File::const_iterator(this->path);
 }
 
-File::const_iterator File::end(void) const {
+File::const_iterator File::cend(void) const {
 	return File::const_iterator();
 }
 

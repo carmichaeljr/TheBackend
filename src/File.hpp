@@ -69,8 +69,8 @@ class File {
 		std::string getExtension(void) const;
 		bool changeName(const std::string &newName, const bool makeCopy=true);
 		std::string getName(void) const;
-		File::const_iterator begin(void) const;
-		File::const_iterator end(void) const;
+		File::const_iterator cbegin(void) const;
+		File::const_iterator cend(void) const;
 		unsigned int getNumLines(void) const;
 		void copy(const File &other) const;
 		void write(const std::string &data);

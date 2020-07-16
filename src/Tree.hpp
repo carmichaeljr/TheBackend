@@ -7,6 +7,18 @@
 
 template <typename T>
 class Tree {
+	friend bool operator==(const Tree<T> &rhs, const Tree<T> &lhs){
+		bool rv=(rhs.size()==lhs.size());
+		Tree<T>::const_iterator rhsIter=rhs.cbegin();
+		Tree<T>::const_iterator lhsIter=lhs.cbegin();
+		for (; rv && rhsIter!=rhs.cend() && lhsIter!=lhs.cend();
+			rv=(*rhsIter==*lhsIter), rhsIter++, lhsIter++);
+		return rv;
+	}
+	friend bool operator!=(const Tree<T> &rhs, const Tree<T> &lhs){
+		return !(rhs==lhs);
+	}
+
 	private:	//Needs to be placed at top for reference later in class
 		class Node {
 			public:
@@ -22,33 +34,8 @@ class Tree {
 		static const int mvDown=1;
 		static const int mvNext=2;
 	public:
-		using nodeType=Tree<T>::Node;
-		template <typename iterVal>
-		class iteratorBase {
-			friend class Tree;
-			friend bool operator==(const iteratorBase<iterVal> &a, const iteratorBase<iterVal> &b){
-				return (a.node==b.node);
-			}
-			friend bool operator!=(const iteratorBase<iterVal> &a, const iteratorBase<iterVal> &b){
-				return (a.node!=b.node);
-			}
-			public:
-				iteratorBase(void);
-				iteratorBase(nodeType *headNode, bool revisit=false);
-				iteratorBase<iterVal>& operator++(const int num);
-				iterVal& operator*(void);
-				//const T& operator*(void) const;
-				iterVal* operator->(void);
-				//const T* operator->(void) const;
-			private:
-				bool revisit;
-				int prevAction;
-				nodeType *node;
-				constexpr bool hasChildren(nodeType *node) const;
-				constexpr bool hasNext(nodeType *node) const;
-				constexpr bool hasParent(nodeType *node) const;
-				void move(const int dir);
-		};
+#include "TreeIterator.tpp"
+		//TODO - make iter and const_iter convertable
 		typedef iteratorBase<T> iterator;
 		typedef iteratorBase<const T> const_iterator;
 
@@ -60,13 +47,17 @@ class Tree {
 		Tree<T>& operator=(Tree<T> &&other);
 		int size(void) const;
 		bool empty(void) const;
-		Tree<T>::iterator begin(bool revisit=false) const;
-		Tree<T>::iterator end(void) const;
+		Tree<T>::iterator begin(bool revisit=false);
+		Tree<T>::const_iterator cbegin(bool revisit=false) const;
+		Tree<T>::iterator end(void);
+		Tree<T>::const_iterator cend(void) const;
 		void emplace(const T &data);
 		void emplace(const Tree<T>::iterator &sibling, const T &data);
 		void emplaceBelow(const Tree<T>::iterator &parent, const T &data);
-		Tree<T>::iterator find(const T &data) const;
-		Tree<T>::iterator find(const Tree<T>::iterator &start, const T &data) const;
+		Tree<T>::iterator find(const T &data);
+		Tree<T>::const_iterator find(const T &data) const;
+		Tree<T>::iterator find(const Tree<T>::iterator &start, const T &data);
+		Tree<T>::const_iterator find(const Tree<T>::const_iterator &start, const T &data) const;
 		int count(const T &data) const;
 		void eraseBelow(const Tree<T>::iterator &start);
 		Tree<T>::iterator erase(const Tree<T>::iterator &start);
@@ -85,10 +76,8 @@ class Tree {
 		Tree<T>::Node* getPrevNode(Tree<T>::Node *node) const;
 		void unlinkNode(Tree<T>::Node *par, Tree<T>::Node *prev, Tree<T>::Node *cur);
 		void performDeepCopy(const Tree<T> &other);
-		
 };
 
 #include "Tree.tpp"
-#include "TreeIterator.tpp"
 
 #endif

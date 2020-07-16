@@ -10,8 +10,8 @@ Tree<T>::Tree(const T &data){
 
 template <typename T>
 Tree<T>::Tree(const Tree<T> &other){
-	this->performDeepCopy(other);
 	//Don't need to clear, new object is already empty
+	this->performDeepCopy(other);
 }
 
 template <typename T>
@@ -49,13 +49,23 @@ bool Tree<T>::empty(void) const {
 }
 
 template <typename T>
-typename Tree<T>::iterator Tree<T>::begin(bool revisit) const {
+typename Tree<T>::iterator Tree<T>::begin(bool revisit){
 	return Tree<T>::iterator(this->headNode,revisit);
 }
 
 template <typename T>
-typename Tree<T>::iterator Tree<T>::end(void) const {
+typename Tree<T>::const_iterator Tree<T>::cbegin(bool revisit) const {
+	return Tree<T>::const_iterator(this->headNode,revisit);
+}
+
+template <typename T>
+typename Tree<T>::iterator Tree<T>::end(void){
 	return Tree<T>::iterator();
+}
+
+template <typename T>
+typename Tree<T>::const_iterator Tree<T>::cend(void) const {
+	return Tree<T>::const_iterator();
 }
 
 template <typename T>
@@ -89,21 +99,33 @@ void Tree<T>::emplaceBelow(const Tree<T>::iterator &parent, const T &data){
 }
 
 template <typename T>
-typename Tree<T>::iterator Tree<T>::find(const T &data) const {
+typename Tree<T>::iterator Tree<T>::find(const T &data){
 	return this->find(this->begin(),data);
 }
 
 template <typename T>
-typename Tree<T>::iterator Tree<T>::find(const typename Tree<T>::iterator &start, const T &data) const {
+typename Tree<T>::const_iterator Tree<T>::find(const T &data) const {
+	return this->find(this->cbegin(),data);
+}
+
+template <typename T>
+typename Tree<T>::iterator Tree<T>::find(const typename Tree<T>::iterator &start, const T &data){
 	Tree<int>::iterator rv(start.node);
 	for(; rv!=this->end() && *rv!=data; rv++);
 	return rv;
 }
 
 template <typename T>
+typename Tree<T>::const_iterator Tree<T>::find(const typename Tree<T>::const_iterator &start, const T &data) const {
+	Tree<int>::const_iterator rv(start.node);
+	for(; rv!=this->cend() && *rv!=data; rv++);
+	return rv;
+}
+
+template <typename T>
 int Tree<T>::count(const T &data) const {
 	int rv=0;
-	for (Tree<T>::iterator iter=this->begin(); iter!=this->end(); iter++){
+	for (Tree<T>::const_iterator iter=this->cbegin(); iter!=this->cend(); iter++){
 		(*iter==data)? rv++: 0;
 	}
 	return rv;
@@ -213,11 +235,11 @@ void Tree<T>::unlinkNode(typename Tree<T>::Node *par, typename Tree<T>::Node *pr
 
 template <typename T>
 void Tree<T>::performDeepCopy(const Tree<T> &other){
-	Tree<T>::iterator otherIter=other.begin();
+	Tree<T>::const_iterator otherIter=other.cbegin();
 	this->emplace(*otherIter);
 	otherIter++;
 	Tree<T>::iterator thisIter=this->begin();
-	for (; otherIter!=other.end(); otherIter++, thisIter++){
+	for (; otherIter!=other.cend(); otherIter++, thisIter++){
 		if (otherIter.prevAction==Tree<T>::mvDown){
 			this->emplaceBelow(thisIter,*otherIter);
 		} else if (otherIter.prevAction==Tree<T>::mvNext){
