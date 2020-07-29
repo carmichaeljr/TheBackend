@@ -3,6 +3,7 @@
 #include "debug/FileDebug.hpp"
 #include "debug/TreeDebug.hpp"
 #include "debug/XMLTagDebug.hpp"
+#include "debug/XMLFileDebug.hpp"
 
 int main(int argc, char **argv){
 	bool successful=true;
@@ -11,6 +12,7 @@ int main(int argc, char **argv){
 	successful&=TreeDebug().run();
 	successful&=FileDebug().run();
 	successful&=XMLTagDebug().run();
+	successful&=XMLFileDebug().run();
 
 	//Print::print(std::cout,"This is a test");
 	//Print::incrementIndentLevel(1);
