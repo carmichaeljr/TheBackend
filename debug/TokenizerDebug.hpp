@@ -16,6 +16,7 @@ class TokenizerDebug: public Debug {
 		bool debugAddInclusionTokens(void);
 		bool debugAddExclusionTokens(void);
 		bool debugParse(void);
+		bool debugParseKeepTokens(void);
 		bool debugVectorInterface(void);
 		bool debugCopyConstructor(void);
 	protected:

@@ -67,39 +67,29 @@ const std::vector<std::string>& Tokenizer::getExclusionTokens(void) const {
 	return this->exclusionTokens;
 }
 
-void Tokenizer::parse(const std::string &raw){
-	char nextTag=0;
-	unsigned int prevIndex=0;
-	for (unsigned int i=0; i<raw.size(); ((i!=std::string::npos)? i++: i)){
-		if (this->splitTokens.find(raw[i])!=std::string::npos){
-			this->addSegment(raw,prevIndex,i);
-			prevIndex=i+1;
-		} else if ((nextTag=this->getPairedToken(this->inclusionTokens,raw[i]))!=0){
-			this->addSegment(raw,prevIndex,i);
-			prevIndex=i+1;
-			i=raw.find_first_of(nextTag,i+1);
-			if (i!=std::string::npos){
-				this->addSegment(raw,prevIndex,i);
-				prevIndex=i+1;
-			} else {
-				this->error|=Tokenizer::unballancedTokens;
+void Tokenizer::parse(const std::string &raw, const bool keepTokens){
+	this->clear();
+	Tokenizer::ParseData pd={ .keepTokens=keepTokens };
+	for (; pd.curIndex<raw.size(); pd.curIndex++){
+		if (pd.exclusionStack.empty() && pd.inclusionStack.empty() && 
+			this->splitTokens.find(raw[pd.curIndex])!=std::string::npos){
+			this->addSegmentAndUpdateIndexes(raw,pd);
+		} else {
+			if (pd.exclusionStack.empty()){
+				this->checkForInclusionToken(raw,pd);
 			}
-		} else if ((nextTag=this->getPairedToken(this->exclusionTokens,raw[i]))!=0){
-			this->addSegment(raw,prevIndex,i);
-			i=raw.find_first_of(nextTag,i+1);
-			prevIndex=i+1;
-			if (i==std::string::npos){
-				this->error|=Tokenizer::unballancedTokens;
+			if (pd.inclusionStack.empty()){
+				this->checkForExclusionToken(raw,pd);
 			}
 		}
 	}
-	if (this->error==Tokenizer::parseSuccess){
-		this->addSegment(raw,prevIndex,raw.size());
+	if (!pd.inclusionStack.empty() || !pd.exclusionStack.empty()){
+		this->error|=Tokenizer::unballancedTokens;
 	}
-
-	//for (int i=0; i<segments.size(); i++){
-	//	std::cout << "Segment: " << i << ": [" << segments[i]  << "]" << std::endl;
-	//}
+	if (this->error==Tokenizer::parseSuccess){
+		pd.curIndex=raw.size();
+		this->addSegmentAndUpdateIndexes(raw,pd);
+	}
 }
 
 bool Tokenizer::good(void) const {
@@ -189,6 +179,37 @@ void Tokenizer::addTokenPairs(std::vector<std::string> &place, const std::string
 	}
 }
 
+void Tokenizer::checkForInclusionToken(const std::string &raw, Tokenizer::ParseData &pd){
+	char nextTag=this->getPairedToken(this->inclusionTokens,raw[pd.curIndex]);
+	if (!pd.inclusionStack.empty() && raw[pd.curIndex]==pd.inclusionStack.back()){
+		pd.inclusionStack.pop_back();
+		if (pd.inclusionStack.empty()){
+			this->addSegmentAndUpdateIndexes(raw,pd);
+		}
+	} else if (nextTag!=0){
+		if (pd.inclusionStack.empty()){
+			this->addSegmentAndUpdateIndexes(raw,pd);
+		}
+		pd.inclusionStack.push_back(nextTag);
+	}
+}
+
+void Tokenizer::checkForExclusionToken(const std::string &raw, Tokenizer::ParseData &pd){
+	char nextTag=this->getPairedToken(this->exclusionTokens,raw[pd.curIndex]);
+	if (!pd.exclusionStack.empty() && raw[pd.curIndex]==pd.exclusionStack.back()){
+		pd.exclusionStack.pop_back();
+		this->addToken(raw,pd);
+		//if (pd.keepTokens){
+		//	this->addToken(raw,pd.prevIndex-1);
+		//}
+		this->updateIndexes(pd);
+		//pd.prevIndex=pd.curIndex+1;
+	} else if (nextTag!=0 && pd.exclusionStack.empty()){
+		pd.exclusionStack.push_back(nextTag);
+		this->addSegmentAndUpdateIndexes(raw,pd);
+	}
+}
+
 char Tokenizer::getPairedToken(const std::vector<std::string> &src, const char openToken) const {
 	char rv=0;
 	for (unsigned int i=0; i<src.size() && rv==0; i++){
@@ -199,8 +220,32 @@ char Tokenizer::getPairedToken(const std::vector<std::string> &src, const char o
 	return rv;
 }
 
+void Tokenizer::addSegmentAndUpdateIndexes(const std::string &raw, Tokenizer::ParseData &pd){
+	//if (pd.keepTokens){
+	//	this->addToken(raw,pd.prevIndex-1);
+	//}
+	//this->addSegment(raw,pd.prevIndex,pd.curIndex);
+	//pd.prevIndex=pd.curIndex+1;
+
+	this->addToken(raw,pd);
+	this->addSegment(raw,pd.prevIndex,pd.curIndex);
+	this->updateIndexes(pd);
+}
+
 void Tokenizer::addSegment(const std::string &raw, const int start, const int end){
 	if (end-start>1){
 		this->segments.push_back(raw.substr(start,end-start));
 	}
+}
+
+void Tokenizer::addToken(const std::string &raw, Tokenizer::ParseData &pd){
+	int index=pd.prevIndex-1;
+	if (pd.keepTokens && index>0){
+		std::string temp(1,raw[index]);
+		this->segments.push_back(temp);
+	}
+}
+
+void Tokenizer::updateIndexes(Tokenizer::ParseData &pd){
+	pd.prevIndex=pd.curIndex+1;
 }

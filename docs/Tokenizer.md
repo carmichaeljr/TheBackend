@@ -4,9 +4,13 @@
 #### Description: A class that parses a string and splits it into segments given certain tokens. This class has a "pass-through" vector interface.
 
 The rules for parsing the given string are defined by "inclusion" token pairs, "exclusion" token pairs, and "split" tokens.
-	- Inclusion token pairs: these are token pairs that include everything inbetween them, including other tokens.
-	- Exclusion token pairs: these are token pairs that exclude everything between them, including other tokens.
-	- Split tokens: these are tokens that do not need to match with another token, and when encountered just create another segment from the previous found token to the current one.
+	* Inclusion token pairs: these are token pairs that include everything in between them, including other tokens, except other inclusion tokens. This is done so that inclusion tokens can be nested, making the below example possible.
+		* Inclusion Pairs: 	<> ""
+		* Parse String:		<Name attr=">">
+		* Correct parsing:	Name attr=">"
+		* Incorrect parsing: 	Name attr="
+	* Exclusion token pairs: these are token pairs that exclude everything between them, including other tokens.
+	* Split tokens: these are tokens that do not need to match with another token, and when encountered just create another segment from the previous found token to the current one.
 The error state of the object is set during the parse call, and can be retrived from the rdstate method. Error states are bitwise or'ed together, allowing for the detection of multiple errors in a single variable.
 
 ### Static Attributes:

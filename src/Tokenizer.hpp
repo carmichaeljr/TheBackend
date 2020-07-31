@@ -20,7 +20,7 @@ class Tokenizer {
 		const std::vector<std::string>& getInclusionTokens(void) const;
 		void addExclusionTokens(const std::string &tokenPairs);
 		const std::vector<std::string>& getExclusionTokens(void) const;
-		void parse(const std::string &raw);
+		void parse(const std::string &raw, const bool keepTokens=false);
 		bool good(void) const;
 		int rdstate(void) const;
 	public:	//vector interface methods
@@ -48,9 +48,21 @@ class Tokenizer {
 		std::vector<std::string> exclusionTokens;
 		std::string splitTokens;
 	private:
+		struct ParseData {
+			std::vector<char> inclusionStack;
+			std::vector<char> exclusionStack;
+			unsigned int curIndex=0;
+			unsigned int prevIndex=0;
+			bool keepTokens=false;
+		};
 		void addTokenPairs(std::vector<std::string> &place, const std::string &raw);
+		void checkForInclusionToken(const std::string &raw, ParseData &pd);
+		void checkForExclusionToken(const std::string &raw, ParseData &pd);
 		char getPairedToken(const std::vector<std::string> &src, const char openToken) const;
+		void addSegmentAndUpdateIndexes(const std::string &raw, ParseData &pd);
 		void addSegment(const std::string &raw, const int start, const int end);
+		void addToken(const std::string &raw, Tokenizer::ParseData &pd);
+		void updateIndexes(Tokenizer::ParseData &pd);
 };
 
 #endif

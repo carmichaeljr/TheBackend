@@ -157,7 +157,7 @@ bool XMLTagDebug::debugParseErrors(void){
 	bool rv=true;
 	XMLTag test;
 
-	rv&=(test.parse("<'unbalanced>")==XMLTag::unballancedTag);
+	rv&=(test.parse("<\"unbalanced>")==XMLTag::unballancedTag);
 	rv&=(test.name.size()==0);
 
 	rv&=(test.parse("<Name unbalancedAttr=data test/>")==XMLTag::unballancedAttrs);

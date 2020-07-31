@@ -6,7 +6,7 @@ TokenizerDebug::TokenizerDebug(void): Debug("Tokenizer"),
 	inclusionTokens("[]\"\""),
 	exclusionTokens("()<>"),
 	parseStrNames({"one","two","three","four.four","five","six","seven","eight)eight"}){
-	//"one.two|.three[four.four]five.\"six\".seven<nothing(nothing>eight)eight"
+	//"one.two| three[four.four]five.\"six\".seven<nothing(nothing>eight)eight"
 	this->parseStr << this->parseStrNames[0] << this->splitTokens[1];
 	this->parseStr << this->parseStrNames[1] << this->splitTokens[2] << this->splitTokens[0];
 	this->parseStr << this->parseStrNames[2] << this->inclusionTokens[0];
@@ -28,6 +28,7 @@ bool TokenizerDebug::debugObjectMethods(void){
 		this->debugAddInclusionTokens() &&
 		this->debugAddExclusionTokens() &&
 		this->debugParse() &&
+		this->debugParseKeepTokens() &&
 		this->debugVectorInterface() &&
 		this->debugCopyConstructor());
 }
@@ -79,7 +80,26 @@ bool TokenizerDebug::debugParse(void){
 	for (unsigned int i=0; i<test.size(); i++){
 		rv&=(test[i]==this->parseStrNames[i]);
 	}
+
+	test.parse("[Nothing\"Nothing]Nothing\"]");
+	rv&=test.good();
+	rv&=(test.rdstate()==Tokenizer::parseSuccess);
+	rv&=(test[0]=="Nothing\"Nothing]Nothing\"");
 	Print::objectMethodDebug(std::cout,"Parse",rv);
+	return rv;
+}
+
+bool TokenizerDebug::debugParseKeepTokens(void){
+	bool rv=true;
+	Tokenizer test;
+	this->initilizeTokenizer(test);
+	test.parse(this->parseStr.str(),true);
+	rv&=test.good();
+	for (unsigned int i=0; i<test.size(); i++){
+		std::cout << i << ": " << test[i] << std::endl;
+	}
+
+	Print::objectMethodDebug(std::cout,"ParseKeepTokens",rv);
 	return rv;
 }
 

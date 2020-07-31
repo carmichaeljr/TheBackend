@@ -3,7 +3,7 @@
 #include "src/XMLTag.hpp"
 #include "src/HelperFunctions.hpp"
 
-const std::string XMLTag::inclusionTokens="\"\"''";
+const std::string XMLTag::inclusionTokens="\"\"";
 const std::string XMLTag::exclusionTokens="/>";
 const std::string XMLTag::splitTokens=" <>=";
 

@@ -6,9 +6,19 @@
 //iter access
 //GT "pass-through" functions
 
-class XMLFile {
+#include <string>
+#include "src/File.hpp"
+#include "src/Tree.hpp"
+#include "src/XMLTag.hpp"
+
+class XMLFile: public File {
 	public:
-		XMLFile(void);
+		XMLFile(const std::string &path);
+		//void setSource(const std::string &path);
+	protected:
+		Tree<XMLTag> data;
+	private:
+		void parseFile(void);
 };
 
 #endif

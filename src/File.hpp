@@ -36,6 +36,13 @@ class File {
 #else
 		'/';
 #endif
+		static bool fileExists(const std::string &file);
+		static bool remove(const std::string &file);
+		static std::string getCwd(void);
+		static std::string getPathFromList(const std::vector<std::string> &dirs);
+		static std::string getPathToApplication(void);
+		//static std::vector<std::string> getFilesInDir(const std::string &str);
+		static std::string getAbsPath(const std::string &relPath);
 	public:
 		class const_iterator {
 			public:
@@ -76,13 +83,6 @@ class File {
 		void write(const std::string &data);
 		void append(const std::string &data);
 		void clear(void);
-		static bool fileExists(const std::string &file);
-		static bool remove(const std::string &file);
-		static std::string getCwd(void);
-		static std::string getPathFromList(const std::vector<std::string> &dirs);
-		static std::string getPathToApplication(void);
-		//static std::vector<std::string> getFilesInDir(const std::string &str);
-		static std::string getAbsPath(const std::string &relPath);
 	protected:
 		std::string path;
 	private:
