@@ -199,11 +199,7 @@ void Tokenizer::checkForExclusionToken(const std::string &raw, Tokenizer::ParseD
 	if (!pd.exclusionStack.empty() && raw[pd.curIndex]==pd.exclusionStack.back()){
 		pd.exclusionStack.pop_back();
 		this->addToken(raw,pd);
-		//if (pd.keepTokens){
-		//	this->addToken(raw,pd.prevIndex-1);
-		//}
 		this->updateIndexes(pd);
-		//pd.prevIndex=pd.curIndex+1;
 	} else if (nextTag!=0 && pd.exclusionStack.empty()){
 		pd.exclusionStack.push_back(nextTag);
 		this->addSegmentAndUpdateIndexes(raw,pd);
@@ -221,12 +217,6 @@ char Tokenizer::getPairedToken(const std::vector<std::string> &src, const char o
 }
 
 void Tokenizer::addSegmentAndUpdateIndexes(const std::string &raw, Tokenizer::ParseData &pd){
-	//if (pd.keepTokens){
-	//	this->addToken(raw,pd.prevIndex-1);
-	//}
-	//this->addSegment(raw,pd.prevIndex,pd.curIndex);
-	//pd.prevIndex=pd.curIndex+1;
-
 	this->addToken(raw,pd);
 	this->addSegment(raw,pd.prevIndex,pd.curIndex);
 	this->updateIndexes(pd);

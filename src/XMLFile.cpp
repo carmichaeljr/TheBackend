@@ -34,22 +34,22 @@ void XMLFile::parseFile(void){
 			std::cout << tokenizer[i] << std::endl;
 		} 
 
-		//if line starts with '<', its a tag
-		//	if first token char is '/', its a closing tag
-		//	else if last token char is '/', its a self closing tag
-		//	else its a tag
-		//else its data for the previous tag
-		if (!line.empty() && line[0]=='<'){
-			if (!tokenizer.empty() && tokenizer[0][0]=='/'){
-				//move up in tree
-			} else if (!tokenizer.empty() && tokenizer[0][tokenizer[0].size()-1]=='/'){
-				//add tag
-				//move up in tree
-			} else {
-				//add tag
-			}
-		} else {
-			//set data at cur node in tree
-		}
+		////if line starts with '<', its a tag
+		////	if first token char is '/', its a closing tag
+		////	else if last token char is '/', its a self closing tag
+		////	else its a tag
+		////else its data for the previous tag
+		//if (!line.empty() && line[0]=='<'){
+		//	if (!tokenizer.empty() && tokenizer[0][0]=='/'){
+		//		//move up in tree
+		//	} else if (!tokenizer.empty() && tokenizer[0][tokenizer[0].size()-1]=='/'){
+		//		//add tag
+		//		//move up in tree
+		//	} else {
+		//		//add tag
+		//	}
+		//} else {
+		//	//set data at cur node in tree
+		//}
 	}
 }
