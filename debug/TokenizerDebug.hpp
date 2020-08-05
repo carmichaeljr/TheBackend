@@ -23,6 +23,7 @@ class TokenizerDebug: public Debug {
 		std::string splitTokens;
 		std::string inclusionTokens;
 		std::string exclusionTokens;
+		std::string parseStrTokens;
 		std::stringstream parseStr;
 		std::vector<std::string> parseStrNames;
 		void initilizeTokenizer(Tokenizer &test);

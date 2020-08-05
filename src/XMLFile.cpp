@@ -28,7 +28,7 @@ void XMLFile::parseFile(void){
 		std::string line=*iter;
 		HelperFunc::trimWhitespace(line);
 		tokenizer.clear();
-		tokenizer.parse(line);
+		tokenizer.parse(line,true);
 
 		for (int i=0; i<tokenizer.size(); i++){
 			std::cout << tokenizer[i] << std::endl;

@@ -5,17 +5,29 @@ TokenizerDebug::TokenizerDebug(void): Debug("Tokenizer"),
 	splitTokens(" .|"),
 	inclusionTokens("[]\"\""),
 	exclusionTokens("()<>"),
+	parseStrTokens(11,' '),
 	parseStrNames({"one","two","three","four.four","five","six","seven","eight)eight"}){
 	//"one.two| three[four.four]five.\"six\".seven<nothing(nothing>eight)eight"
-	this->parseStr << this->parseStrNames[0] << this->splitTokens[1];
-	this->parseStr << this->parseStrNames[1] << this->splitTokens[2] << this->splitTokens[0];
-	this->parseStr << this->parseStrNames[2] << this->inclusionTokens[0];
-	this->parseStr << this->parseStrNames[3] << this->inclusionTokens[1];
-	this->parseStr << this->parseStrNames[4] << this->splitTokens[1] << this->inclusionTokens[2];
-	this->parseStr << this->parseStrNames[5] << this->inclusionTokens[3] << this->splitTokens[1];
-	this->parseStr << this->parseStrNames[6] << this->exclusionTokens[2];
+	this->parseStrTokens[0]=this->splitTokens[1];
+	this->parseStrTokens[1]=this->splitTokens[2];
+	this->parseStrTokens[2]=this->splitTokens[0];
+	this->parseStrTokens[3]=this->inclusionTokens[0];
+	this->parseStrTokens[4]=this->inclusionTokens[1];
+	this->parseStrTokens[5]=this->splitTokens[1];
+	this->parseStrTokens[6]=this->inclusionTokens[2];
+	this->parseStrTokens[7]=this->inclusionTokens[3];
+	this->parseStrTokens[8]=this->splitTokens[1];
+	this->parseStrTokens[9]=this->exclusionTokens[2];
+	this->parseStrTokens[10]=this->exclusionTokens[3];
+	this->parseStr << this->parseStrNames[0] << this->parseStrTokens[0];
+	this->parseStr << this->parseStrNames[1] << this->parseStrTokens[1] << this->parseStrTokens[2];
+	this->parseStr << this->parseStrNames[2] << this->parseStrTokens[3];
+	this->parseStr << this->parseStrNames[3] << this->parseStrTokens[4];
+	this->parseStr << this->parseStrNames[4] << this->parseStrTokens[5] << this->parseStrTokens[6];
+	this->parseStr << this->parseStrNames[5] << this->parseStrTokens[7] << this->parseStrTokens[8];
+	this->parseStr << this->parseStrNames[6] << this->parseStrTokens[9];
 	this->parseStr << "nothing" << this->exclusionTokens[0];
-	this->parseStr << "nothing" << this->exclusionTokens[3];
+	this->parseStr << "nothing" << this->parseStrTokens[10];
 	this->parseStr << this->parseStrNames[7];
 }
 
@@ -95,8 +107,11 @@ bool TokenizerDebug::debugParseKeepTokens(void){
 	this->initilizeTokenizer(test);
 	test.parse(this->parseStr.str(),true);
 	rv&=test.good();
-	for (unsigned int i=0; i<test.size(); i++){
-		std::cout << i << ": " << test[i] << std::endl;
+	for (unsigned int i=0, j=0; i<test.size(); i++){
+		if (test[i].size()==1){
+			rv&=(test[i][0]==this->parseStrTokens[j]);
+			j++;
+		}
 	}
 
 	Print::objectMethodDebug(std::cout,"ParseKeepTokens",rv);

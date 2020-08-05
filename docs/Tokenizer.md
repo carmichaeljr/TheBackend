@@ -53,8 +53,8 @@ The error state of the object is set during the parse call, and can be retrived 
 1. ```const std::vector<std::string> getExclusionTokens(void)```
 	1. Returns a const reference to the objects internal list of exclusion tokens.
 
-1. ```void parse(const std::string &raw)```
-	1. Parses a string using the objects current split, inclusion, and exclusion tokens. These tokens are set through there respective get and set methods outlined above. If an error is encountered, the objects error flag will be set accordingly. This error code can then be retreved from a ```rdstate``` call. Error states are bit-wise or'ed together, allowing for the detection of multiple errors in a single flag.
+1. ```void parse(const std::string &raw, const bool keepTokens=false)```
+	1. Parses a string into segments using the objects current split, inclusion, and exclusion tokens. These tokens are set through there respective get and set methods outlined above. If an error is encountered, the objects error flag will be set accordingly. This error code can then be retreved from a ```rdstate``` call. Error states are bit-wise or'ed together, allowing for the detection of multiple errors in a single flag. If the ``keepTokens``` flag is set to true, then tokens will be added as there own separate segments in the final parsed string.
 
 1. ```bool good(void) const```
 	1. Returns weather or not any errors were thrown durring the previous parse call. Returns true if no errors were encountered.
