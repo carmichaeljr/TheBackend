@@ -10,15 +10,18 @@
 #include "src/File.hpp"
 #include "src/Tree.hpp"
 #include "src/XMLTag.hpp"
+#include "src/Tokenizer.hpp"
 
 class XMLFile: public File {
 	public:
-		XMLFile(const std::string &path);
+		explicit XMLFile(const std::string &path);
 		//void setSource(const std::string &path);
+		//void clear(void);
 	protected:
 		Tree<XMLTag> data;
 	private:
 		void parseFile(void);
+		void parseLine(const Tokenizer &tokenizer, Tree<XMLTag>::iterator &iter);
 };
 
 #endif

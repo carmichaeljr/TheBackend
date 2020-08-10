@@ -49,8 +49,8 @@ class Tokenizer {
 		std::string splitTokens;
 	private:
 		struct ParseData {
-			std::vector<char> inclusionStack;
-			std::vector<char> exclusionStack;
+			std::vector<std::string> inclusionStack;
+			std::vector<std::string> exclusionStack;
 			unsigned int curIndex=0;
 			unsigned int prevIndex=0;
 			bool keepTokens=false;
@@ -58,7 +58,7 @@ class Tokenizer {
 		void addTokenPairs(std::vector<std::string> &place, const std::string &raw);
 		void checkForInclusionToken(const std::string &raw, ParseData &pd);
 		void checkForExclusionToken(const std::string &raw, ParseData &pd);
-		char getPairedToken(const std::vector<std::string> &src, const char openToken) const;
+		std::string getPairedToken(const std::vector<std::string> &src, const char openToken) const;
 		void addSegmentAndUpdateIndexes(const std::string &raw, ParseData &pd);
 		void addSegment(const std::string &raw, const int start, const int end);
 		void addToken(const std::string &raw, Tokenizer::ParseData &pd);

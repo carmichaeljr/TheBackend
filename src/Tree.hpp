@@ -25,9 +25,9 @@ class Tree {
 				Node(void);
 				explicit Node(const T &data);
 				T data;
-				Tree<T>::Node *parent;
-				Tree<T>::Node *child;
-				Tree<T>::Node *next;
+				Tree<T>::Node *parent=nullptr;
+				Tree<T>::Node *child=nullptr;
+				Tree<T>::Node *next=nullptr;
 		};
 	public:
 		static const int mvUp=0;
@@ -35,7 +35,6 @@ class Tree {
 		static const int mvNext=2;
 	public:
 #include "TreeIterator.tpp"
-		//TODO - make iter and const_iter convertable
 		typedef iteratorBase<T> iterator;
 		typedef iteratorBase<const T> const_iterator;
 
@@ -51,9 +50,9 @@ class Tree {
 		Tree<T>::const_iterator cbegin(bool revisit=false) const;
 		Tree<T>::iterator end(void);
 		Tree<T>::const_iterator cend(void) const;
-		void emplace(const T &data);
-		void emplace(const Tree<T>::iterator &sibling, const T &data);
-		void emplaceBelow(const Tree<T>::iterator &parent, const T &data);
+		Tree<T>::iterator emplace(const T &data);
+		Tree<T>::iterator emplace(const Tree<T>::iterator &sibling, const T &data);
+		Tree<T>::iterator emplaceBelow(const Tree<T>::iterator &parent, const T &data);
 		Tree<T>::iterator find(const T &data);
 		Tree<T>::const_iterator find(const T &data) const;
 		Tree<T>::iterator find(const Tree<T>::iterator &start, const T &data);

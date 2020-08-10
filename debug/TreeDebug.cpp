@@ -36,15 +36,15 @@ bool TreeDebug::debugEmplace(void){
 	bool rv=true;
 	Tree<int> test(1);
 	Tree<int>::iterator iter=test.begin();
-	test.emplace(2);
+	rv&=(*test.emplace(2)==2);
 	rv&=(*iter==1);
 	iter++;
 	rv&=(*iter==2);
 	rv&=(test.size()==2);
 
 	Tree<int> test2;
-	test2.emplace(1);
-	test2.emplace(2);
+	rv&=(*test2.emplace(1)==1);
+	rv&=(*test2.emplace(2)==2);
 	Tree<int>::iterator iter2=test2.begin();
 	rv&=(*iter2==1);
 	iter2++;
@@ -59,9 +59,9 @@ bool TreeDebug::debugEmplaceBelow(void){
 	std::vector<int> correct={ 1,3,4,2 };
 	Tree<int> test(1);
 	Tree<int>::iterator iter=test.begin();
-	test.emplace(2);
-	test.emplaceBelow(iter,3);
-	test.emplaceBelow(iter,4);
+	rv&=(*test.emplace(2)==2);
+	rv&=(*test.emplaceBelow(iter,3)==3);
+	rv&=(*test.emplaceBelow(iter,4)==4);
 	for (int i=0; i<4; i++, iter++){
 		rv&=(*iter==correct[i]);
 	}
@@ -187,6 +187,25 @@ bool TreeDebug::debugEquals(void){
 	Print::objectMethodDebug(std::cout,"Equals",rv);
 	return rv;
 }
+
+/*
+Creates this tree:
+		      0, ------------ 1, 2, 3, 4
+		      |               |
+                      |               |
+                     / \              |
+                    /   \             |
+                /--`    `--\          |
+		5, 6, 7, 8, 9         |
+                |                     |
+               / \                    |
+              /   \                   |
+          /--`    `--\                |
+          15,16,17,18,19             / \
+			            /   \
+				 /--`    `--\
+				 10,11,12,13,14
+*/
 
 Tree<int> TreeDebug::createDebugTestTree(void) const {
 	Tree<int> rv(0);

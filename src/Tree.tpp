@@ -69,23 +69,26 @@ typename Tree<T>::const_iterator Tree<T>::cend(void) const {
 }
 
 template <typename T>
-void Tree<T>::emplace(const T &data){
+typename Tree<T>::iterator Tree<T>::emplace(const T &data){
 	if (this->headNode==nullptr){
 		this->setHeadNode(data);
+		return this->begin();
 	} else {
-		this->emplace(this->begin(),data);
+		return this->emplace(this->begin(),data);
 	}
 }
 
 template <typename T>
-void Tree<T>::emplace(const Tree<T>::iterator &sibling, const T &data){
+typename Tree<T>::iterator Tree<T>::emplace(const Tree<T>::iterator &sibling, const T &data){
 	Tree<T>::Node *end=this->getEndOfSiblings(sibling.node);
-	this->appendToSiblings(end,this->createNode(data));
+	Tree<T>::Node *tmp=this->createNode(data);
+	this->appendToSiblings(end,tmp);
 	this->numElem++;
+	return Tree<T>::iterator(tmp);
 }
 
 template <typename T>
-void Tree<T>::emplaceBelow(const Tree<T>::iterator &parent, const T &data){
+typename Tree<T>::iterator Tree<T>::emplaceBelow(const Tree<T>::iterator &parent, const T &data){
 	Tree<T>::Node *newChild=this->createNode(data);
 	Tree<T>::Node *parNode=parent.node;
 	if (parNode->child==nullptr){
@@ -96,6 +99,7 @@ void Tree<T>::emplaceBelow(const Tree<T>::iterator &parent, const T &data){
 		this->appendToSiblings(end,newChild);
 	}
 	this->numElem++;
+	return Tree<T>::iterator(newChild);
 }
 
 template <typename T>
@@ -138,7 +142,7 @@ void Tree<T>::eraseBelow(const Tree<T>::iterator &start){
 		Tree<T>::iterator iter(start.node,true);
 		iter++;
 		while (iter!=this->end() && iter!=start){
-			tmp=(iter.prevAction!=Tree<T>::mvDown || iter.node->child==nullptr)? iter.node: nullptr;
+			tmp=(iter.prevAction==Tree<T>::mvUp || iter.node->child==nullptr)? iter.node: nullptr;
 			iter++;
 			if (tmp!=nullptr){
 				this->deleteNode(tmp);
@@ -155,8 +159,6 @@ typename Tree<T>::iterator Tree<T>::erase(const Tree<T>::iterator &start){
 	Tree<T>::Node *cur=start.node;
 	Tree<T>::Node *par=this->getParentNode(start.node);
 	Tree<T>::Node *prev=this->getPrevNode(start.node);
-	//std::cout << "Par Node: " << ((par!=nullptr)? par->data: -1)  << std::endl;
-	//std::cout << "Prev Node: " << ((prev!=nullptr)? prev->data: -1) << std::endl;
 	this->unlinkNode(par,prev,cur);
 	return rv;
 }
@@ -188,7 +190,6 @@ constexpr typename Tree<T>::Node* Tree<T>::createNode(const T &data) const {
 template <typename T>
 void Tree<T>::deleteNode(Tree<T>::Node *node) {
 	delete node;
-	//std::cout << "del: " << node->data << std::endl;
 	this->numElem--;
 }
 
@@ -252,15 +253,11 @@ void Tree<T>::performDeepCopy(const Tree<T> &other){
 //Inner Node Class
 template <typename T>
 Tree<T>::Node::Node(void){
-	this->parent=nullptr;
-	this->child=nullptr;
-	this->next=nullptr;
+	//
 }
 
 template <typename T>
-Tree<T>::Node::Node(const T &data){
-	this->parent=nullptr;
-	this->child=nullptr;
-	this->next=nullptr;
-	this->data=data;
+Tree<T>::Node::Node(const T &ndata): 
+	data(ndata) {
+	//
 }

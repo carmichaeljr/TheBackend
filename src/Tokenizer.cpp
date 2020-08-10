@@ -1,4 +1,5 @@
 #include <utility>
+#include <sstream>
 #include <algorithm>
 #include "src/Tokenizer.hpp"
 
@@ -180,13 +181,13 @@ void Tokenizer::addTokenPairs(std::vector<std::string> &place, const std::string
 }
 
 void Tokenizer::checkForInclusionToken(const std::string &raw, Tokenizer::ParseData &pd){
-	char nextTag=this->getPairedToken(this->inclusionTokens,raw[pd.curIndex]);
-	if (!pd.inclusionStack.empty() && raw[pd.curIndex]==pd.inclusionStack.back()){
+	std::string nextTag=this->getPairedToken(this->inclusionTokens,raw[pd.curIndex]);
+	if (!pd.inclusionStack.empty() && pd.inclusionStack.back().find(raw[pd.curIndex])!=std::string::npos){
 		pd.inclusionStack.pop_back();
 		if (pd.inclusionStack.empty()){
 			this->addSegmentAndUpdateIndexes(raw,pd);
 		}
-	} else if (nextTag!=0){
+	} else if (nextTag.size()>0){
 		if (pd.inclusionStack.empty()){
 			this->addSegmentAndUpdateIndexes(raw,pd);
 		}
@@ -195,25 +196,25 @@ void Tokenizer::checkForInclusionToken(const std::string &raw, Tokenizer::ParseD
 }
 
 void Tokenizer::checkForExclusionToken(const std::string &raw, Tokenizer::ParseData &pd){
-	char nextTag=this->getPairedToken(this->exclusionTokens,raw[pd.curIndex]);
-	if (!pd.exclusionStack.empty() && raw[pd.curIndex]==pd.exclusionStack.back()){
+	std::string nextTag=this->getPairedToken(this->exclusionTokens,raw[pd.curIndex]);
+	if (!pd.exclusionStack.empty() && pd.exclusionStack.back().find(raw[pd.curIndex])!=std::string::npos){
 		pd.exclusionStack.pop_back();
 		this->addToken(raw,pd);
 		this->updateIndexes(pd);
-	} else if (nextTag!=0 && pd.exclusionStack.empty()){
+	} else if (nextTag.size()>0 && pd.exclusionStack.empty()){
 		pd.exclusionStack.push_back(nextTag);
 		this->addSegmentAndUpdateIndexes(raw,pd);
 	}
 }
 
-char Tokenizer::getPairedToken(const std::vector<std::string> &src, const char openToken) const {
-	char rv=0;
-	for (unsigned int i=0; i<src.size() && rv==0; i++){
+std::string Tokenizer::getPairedToken(const std::vector<std::string> &src, const char openToken) const {
+	std::stringstream rv;
+	for (unsigned int i=0; i<src.size(); i++){
 		if (src[i][0]==openToken){
-			rv=src[i][1];
+			rv << src[i][1];
 		}
 	}
-	return rv;
+	return rv.str();
 }
 
 void Tokenizer::addSegmentAndUpdateIndexes(const std::string &raw, Tokenizer::ParseData &pd){
@@ -230,7 +231,7 @@ void Tokenizer::addSegment(const std::string &raw, const int start, const int en
 
 void Tokenizer::addToken(const std::string &raw, Tokenizer::ParseData &pd){
 	int index=pd.prevIndex-1;
-	if (pd.keepTokens && index>0){
+	if (pd.keepTokens && index>=0){
 		std::string temp(1,raw[index]);
 		this->segments.push_back(temp);
 	}
