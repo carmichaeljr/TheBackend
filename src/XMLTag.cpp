@@ -22,9 +22,9 @@ XMLTag::XMLTag(const std::string &nName, const std::string &nData):
 }
 
 XMLTag::XMLTag(const XMLTag &other):
+	MapPassThrough(other.ptMap),
 	name(other.name),
-	data(other.data),
-	attributes(other.attributes) {
+	data(other.data){
 	//
 }
 
@@ -36,7 +36,7 @@ XMLTag& XMLTag::operator=(const XMLTag &other){
 	this->clear();
 	this->name=other.name;
 	this->data=other.data;
-	this->attributes=other.attributes;
+	MapPassThrough::ptMap=other.ptMap;
 	return *this;
 }
 
@@ -45,7 +45,7 @@ XMLTag& XMLTag::operator=(const XMLTag &&other){
 		this->clear();
 		this->name=other.name;
 		this->data=other.data;
-		this->attributes=other.attributes;
+		MapPassThrough::ptMap=other.ptMap;
 	}
 	return *this;
 }
@@ -66,8 +66,8 @@ std::string XMLTag::getOpeningTag(bool selfClosing) const {
 	std::stringstream rv;
 	this->getParseableSegment(buf,this->name);
 	rv << "<" << buf << " ";
-	for (std::map<std::string,std::string>::const_iterator iter=this->attributes.cbegin();
-		iter!=this->attributes.cend(); iter++){
+	for (std::map<std::string,std::string>::const_iterator iter=MapPassThrough::cbegin();
+		iter!=MapPassThrough::cend(); iter++){
 		this->getParseableSegment(buf,iter->first);
 		rv << iter->first << "=";
 		this->getParseableSegment(buf,iter->second);
@@ -86,62 +86,14 @@ std::string XMLTag::getClosingTag(void) const {
 	return rv.str();
 }
 
-void XMLTag::emplace(const std::string &key, const std::string &val){
-	this->attributes.emplace(key,val);
-}
-
-std::string& XMLTag::operator[](const std::string &attrName){
-	return this->attributes[attrName];
-}
-
-int XMLTag::size(void) const {
-	return this->attributes.size();
-}
-
-std::map<std::string,std::string>::iterator XMLTag::begin(void){
-	return this->attributes.begin();
-}
-
-const std::map<std::string,std::string>::const_iterator XMLTag::begin(void) const {
-	return this->attributes.begin();
-}
-
-std::map<std::string,std::string>::iterator XMLTag::end(void){
-	return this->attributes.end();
-}
-
-const std::map<std::string,std::string>::const_iterator XMLTag::end(void) const {
-	return this->attributes.end();
-}
-
-std::map<std::string,std::string>::const_iterator XMLTag::cbegin(void){
-	return this->attributes.cbegin();
-}
-
-std::map<std::string,std::string>::const_iterator XMLTag::cend(void){
-	return this->attributes.cend();
-}
-
-std::map<std::string,std::string>::iterator XMLTag::find(const std::string &name){
-	return this->attributes.find(name);
-}
-
-int XMLTag::count(const std::string &key) const {
-	return this->attributes.count(key);
-}
-
 void XMLTag::swap(XMLTag &other){
 	std::swap(other.name,this->name);
 	std::swap(other.data,this->data);
-	this->attributes.swap(other.attributes);
-}
-
-void XMLTag::erase(const std::string &attr){
-	this->attributes.erase(attr);	
+	MapPassThrough::swap(other.ptMap);
 }
 
 void XMLTag::clear(void){
-	this->attributes.clear();
+	MapPassThrough::clear();
 	this->data="";
 	this->name="";
 }
@@ -152,7 +104,7 @@ int XMLTag::setDataFromTokens(const Tokenizer &tokens){
 		this->name=tokens[0];
 	}
 	for (unsigned int i=2; i<tokens.size(); i+=2){
-		this->attributes[tokens[i-1]]=tokens[i];
+		MapPassThrough::ptMap[tokens[i-1]]=tokens[i];
 	}
 	return ((tokens.size()>1 && tokens.size()%2==0)? XMLTag::unballancedAttrs: XMLTag::parseSuccess);
 }
@@ -182,7 +134,7 @@ bool XMLTag::containsTag(const std::string &data) const {
 //Friend Methods================================================================
 bool operator==(const XMLTag &rhs, const XMLTag &lhs){
 	return (rhs.name==lhs.name && rhs.data==lhs.data &&
-		rhs.attributes==lhs.attributes);
+		rhs.ptMap==lhs.ptMap);
 }
 
 bool operator!=(const XMLTag &rhs, const XMLTag &lhs){

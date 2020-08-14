@@ -51,7 +51,15 @@ class iteratorBase {
 			return this->node->data;
 		}
 
+		iterVal& operator*(void) const {
+			return this->node->data;
+		}
+
 		iterVal* operator->(void){
+			return (&this->node->data);
+		}
+
+		iterVal* operator->(void) const {
 			return (&this->node->data);
 		}
 	private:

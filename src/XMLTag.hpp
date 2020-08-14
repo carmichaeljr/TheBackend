@@ -5,8 +5,9 @@
 #include <map>
 #include <string>
 #include "src/Tokenizer.hpp"
+#include "src/MapPassThrough.hpp"
 
-class XMLTag {
+class XMLTag: public MapPassThrough<std::string,std::string> {
 	friend bool operator==(const XMLTag &rhs, const XMLTag &lhs);
 	friend bool operator!=(const XMLTag &rhs, const XMLTag &lhs);
 	public:
@@ -30,23 +31,8 @@ class XMLTag {
 		int parse(const std::string &data);
 		std::string getOpeningTag(bool selfClosing=false) const;
 		std::string getClosingTag(void) const;
-	public:	//map interface methods
-		void emplace(const std::string &key, const std::string &val);
-		std::string& operator[](const std::string &attrName);
-		int size(void) const;
-		std::map<std::string,std::string>::iterator begin(void);
-		const std::map<std::string,std::string>::const_iterator begin(void) const;
-		std::map<std::string,std::string>::iterator end(void);
-		const std::map<std::string,std::string>::const_iterator end(void) const;
-		std::map<std::string,std::string>::const_iterator cbegin(void);
-		std::map<std::string,std::string>::const_iterator cend(void);
-		std::map<std::string,std::string>::iterator find(const std::string &name);
-		int count(const std::string &key) const;
 		void swap(XMLTag &other);
-		void erase(const std::string &attr);
 		void clear(void);
-	protected:
-		std::map<std::string,std::string> attributes;
 	private:
 		static const std::string splitTokens;
 		static const std::string inclusionTokens;

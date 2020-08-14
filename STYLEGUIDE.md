@@ -3,6 +3,7 @@
 Please follow the rules outline in the document below when contributing.
 
 ### Classes
+1. In a classes initializer list, super class initializers go before any member variables.
 1. In a class, the order of attributes should go ```public```,```protected```, then ```private```.
 1. Unless explicitly only needed for the private implementation of a class, all attributes should be declared ```protected```.
 1. All comparison operators will be declared as friend functions above any public/protected/private class definitions.

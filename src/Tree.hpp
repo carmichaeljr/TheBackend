@@ -44,7 +44,7 @@ class Tree {
 		Tree(Tree<T> &&other);
 		Tree<T>& operator=(const Tree<T> &other);
 		Tree<T>& operator=(Tree<T> &&other);
-		int size(void) const;
+		size_t size(void) const;
 		bool empty(void) const;
 		Tree<T>::iterator begin(bool revisit=false);
 		Tree<T>::const_iterator cbegin(bool revisit=false) const;
@@ -57,7 +57,7 @@ class Tree {
 		Tree<T>::const_iterator find(const T &data) const;
 		Tree<T>::iterator find(const Tree<T>::iterator &start, const T &data);
 		Tree<T>::const_iterator find(const Tree<T>::const_iterator &start, const T &data) const;
-		int count(const T &data) const;
+		size_t count(const T &data) const;
 		void eraseBelow(const Tree<T>::iterator &start);
 		Tree<T>::iterator erase(const Tree<T>::iterator &start);
 		void clear(void);

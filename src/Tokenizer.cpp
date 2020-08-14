@@ -8,8 +8,8 @@ Tokenizer::Tokenizer(void){
 }
 
 Tokenizer::Tokenizer(const Tokenizer &other):
+	VectorPassThrough(other.ptVec),
 	error(other.error),
-	segments(other.segments),
 	inclusionTokens(other.inclusionTokens),
 	exclusionTokens(other.exclusionTokens),
 	splitTokens(other.splitTokens) {
@@ -22,7 +22,7 @@ Tokenizer::Tokenizer(const Tokenizer &&other){
 
 Tokenizer& Tokenizer::operator=(const Tokenizer &other){
 	this->clear();
-	this->segments=other.segments;
+	VectorPassThrough::ptVec=other.ptVec;
 	this->inclusionTokens=other.inclusionTokens;
 	this->exclusionTokens=other.exclusionTokens;
 	this->splitTokens=other.splitTokens;
@@ -32,7 +32,7 @@ Tokenizer& Tokenizer::operator=(const Tokenizer &other){
 Tokenizer& Tokenizer::operator=(const Tokenizer &&other){
 	if (this!=&other){
 		this->clear();
-		this->segments=other.segments;
+		VectorPassThrough::ptVec=other.ptVec;
 		this->inclusionTokens=other.inclusionTokens;
 		this->exclusionTokens=other.exclusionTokens;
 		this->splitTokens=other.splitTokens;
@@ -101,72 +101,8 @@ int Tokenizer::rdstate(void) const {
 	return this->error;
 }
 
-std::string& Tokenizer::at(const int index){
-	return this->segments.at(index);
-}
-
-const std::string& Tokenizer::at(const int index) const {
-	return this->segments.at(index);
-}
-
-std::string& Tokenizer::operator[](const int index){
-	return this->segments[index];
-}
-
-const std::string& Tokenizer::operator[](const int index) const {
-	return this->segments[index];
-}
-
-std::string& Tokenizer::front(void){
-	return this->segments.front();
-}
-
-const std::string& Tokenizer::front(void) const {
-	return this->segments.front();
-}
-
-std::string& Tokenizer::back(void){
-	return this->segments.back();
-}
-
-const std::string& Tokenizer::back(void) const {
-	return this->segments.back();
-}
-
-std::vector<std::string>::iterator Tokenizer::begin(void){
-	return this->segments.begin();
-}
-
-const std::vector<std::string>::const_iterator Tokenizer::begin(void) const {
-	return this->segments.begin();
-}
-
-std::vector<std::string>::iterator Tokenizer::end(void){
-	return this->segments.end();
-}
-
-const std::vector<std::string>::const_iterator Tokenizer::end(void) const {
-	return this->segments.end();
-}
-
-std::vector<std::string>::const_iterator Tokenizer::cbegin(void){
-	return this->segments.cbegin();
-}
-
-std::vector<std::string>::const_iterator Tokenizer::cend(void){
-	return this->segments.cend();
-}
-
-bool Tokenizer::empty(void) const {
-	return this->segments.empty();
-}
-
-unsigned int Tokenizer::size(void) const {
-	return this->segments.size();
-}
-
 void Tokenizer::clear(void){
-	this->segments.clear();
+	VectorPassThrough::clear();
 	this->error=Tokenizer::parseSuccess;
 }
 
@@ -225,7 +161,7 @@ void Tokenizer::addSegmentAndUpdateIndexes(const std::string &raw, Tokenizer::Pa
 
 void Tokenizer::addSegment(const std::string &raw, const int start, const int end){
 	if (end-start>1){
-		this->segments.push_back(raw.substr(start,end-start));
+		VectorPassThrough::ptVec.push_back(raw.substr(start,end-start));
 	}
 }
 
@@ -233,7 +169,7 @@ void Tokenizer::addToken(const std::string &raw, Tokenizer::ParseData &pd){
 	int index=pd.prevIndex-1;
 	if (pd.keepTokens && index>=0){
 		std::string temp(1,raw[index]);
-		this->segments.push_back(temp);
+		VectorPassThrough::ptVec.push_back(temp);
 	}
 }
 

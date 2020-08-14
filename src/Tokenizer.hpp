@@ -3,8 +3,9 @@
 
 #include <string>
 #include <vector>
+#include "src/VectorPassThrough.hpp"
 
-class Tokenizer {
+class Tokenizer: public VectorPassThrough<std::string> {
 	public:
 		static const int parseSuccess=0;
 		static const int unballancedTokens=1;
@@ -23,27 +24,9 @@ class Tokenizer {
 		void parse(const std::string &raw, const bool keepTokens=false);
 		bool good(void) const;
 		int rdstate(void) const;
-	public:	//vector interface methods
-		std::string& at(const int index);
-		const std::string& at(const int index) const;
-		std::string& operator[](const int index);
-		const std::string& operator[](const int index) const;
-		std::string& front(void);
-		const std::string& front(void) const;
-		std::string& back(void);
-		const std::string& back(void) const;
-		std::vector<std::string>::iterator begin(void);
-		const std::vector<std::string>::const_iterator begin(void) const;
-		std::vector<std::string>::iterator end(void);
-		const std::vector<std::string>::const_iterator end(void) const;
-		std::vector<std::string>::const_iterator cbegin(void);
-		std::vector<std::string>::const_iterator cend(void);
-		bool empty(void) const;
-		unsigned int size(void) const;
 		void clear(void);
 	protected:
 		int error=Tokenizer::parseSuccess;
-		std::vector<std::string> segments;
 		std::vector<std::string> inclusionTokens;
 		std::vector<std::string> exclusionTokens;
 		std::string splitTokens;

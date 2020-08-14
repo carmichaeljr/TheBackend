@@ -27,22 +27,18 @@ void XMLFile::parseFile(void){
 	Tokenizer tokenizer;
 	tokenizer.addInclusionTokens("\"\"");
 	tokenizer.addSplitTokens("<>/");
-	Tree<XMLTag>::iterator dataIter=this->data.end(); 
-	//Will need to place at start upon adding first node
-	int i=0;
-	//std::cout << File::getPath() << std::endl;
-	for (File::const_iterator iter=File::cbegin(); iter!=File::cend(); i++,iter++){
-		std::cout << i << ": " << *iter << std::endl;
-
+	Tree<XMLTag>::iterator tagIter=TreePassThrough::end(); //Will need to place at start upon adding first node
+	for (File::const_iterator iter=File::cbegin(); iter!=File::cend(); iter++){
 		std::string line=*iter;
 		HelperFunc::trimWhitespace(line);
 		tokenizer.clear();
 		tokenizer.parse(line,true);
+		this->parseLine(tokenizer,tagIter);
+	}
 
-		//for (int i=0; i<tokenizer.size(); i++){
-		//	std::cout << tokenizer[i] << std::endl;
-		//} 
-		this->parseLine(tokenizer,dataIter);
+	std::cout << TreePassThrough::size() << std::endl;
+	for (Tree<XMLTag>::iterator iter=TreePassThrough::begin(true); iter!=TreePassThrough::end(); iter++){
+		std::cout << iter->name << std::endl;
 	}
 }
 
@@ -50,51 +46,41 @@ void XMLFile::parseLine(const Tokenizer &tokenizer, Tree<XMLTag>::iterator &iter
 	for (unsigned int i=2; i<tokenizer.size(); i++){
 		if (tokenizer[i-2]=="<" && tokenizer[i]==">"){
 			//open node, add node
-
-			std::cout << "Adding node: " << tokenizer[i-1] << std::endl;
-			if (iter==this->data.end()){
-				std::cout << "END???" << std::endl;
-			}
-			XMLTag temp(tokenizer[i-1]);
-			if (this->data.size()==0){
-				this->data.emplace(temp);
-				iter=this->data.begin(true);
-			} else {
-				iter=this->data.emplaceBelow(iter,temp);
-				iter.revisit=true;
-			}
-
+			this->addNode(iter,tokenizer[i-1],false);
 		} else if (tokenizer[i-2]==">" && tokenizer[i]=="<"){
 			//data
-
-			std::cout << "Adding data: " << tokenizer[i-1] << std::endl;
-			iter->data=tokenizer[i-1];
-
+			this->addData(iter,tokenizer[i-1]);
 		} else if (i>2 && tokenizer[i-3]=="<" && tokenizer[i-1]=="/" && tokenizer[i]==">"){
-			//self closing node, add as child
-
-			std::cout << "Adding self closing node: " << tokenizer[i-2] << std::endl;
-			XMLTag temp(tokenizer[i-2]);
-			if (this->data.size()==0){
-				this->data.emplace(temp);
-				iter=this->data.begin(true);
-			} else {
-				iter=this->data.emplaceBelow(iter,temp);
-				iter.revisit=true;
-				iter++;
-			}
-
-
+			//self closing node
+			this->addNode(iter,tokenizer[i-2],true);
 		} else if (i>2 && tokenizer[i-3]=="<" && tokenizer[i-2]=="/" && tokenizer[i]==">"){
 			//closing node, move up
-			std::cout << "Moving Up: " << tokenizer[i-1] << std::endl;
-
 			iter++;
 		} 
 	}
+}
 
-	std::cout << this->data.size() << std::endl;
-	for (Tree<XMLTag>::iterator iter=this->data.begin(true); iter!=this->data.end(); iter++){
-		std::cout << iter->name << std::endl;
+void XMLFile::addNode(Tree<XMLTag>::iterator &iter, const std::string &rawData, const bool selfClosing){
+	if (TreePassThrough::size()==0){
+		this->addFirstNode(iter,rawData);
+	} else {
+		this->addNthNode(iter,rawData);
+		if (selfClosing){
+			iter++;
+		}
 	}
+}
+
+void XMLFile::addFirstNode(Tree<XMLTag>::iterator &iter, const std::string &rawData){
+	iter=TreePassThrough::emplace(XMLTag(rawData));
+	iter.revisit=true;
+}
+
+void XMLFile::addNthNode(Tree<XMLTag>::iterator &iter, const std::string &rawData){
+	iter=TreePassThrough::emplaceBelow(iter,XMLTag(rawData));
+	iter.revisit=true;
+}
+
+void XMLFile::addData(const Tree<XMLTag>::iterator &iter, const std::string &rawData){
+	iter->data=rawData;
 }

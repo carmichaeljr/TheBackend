@@ -39,7 +39,7 @@ Tree<T>& Tree<T>::operator=(Tree<T> &&other){
 }
 
 template <typename T>
-int Tree<T>::size(void) const {
+size_t Tree<T>::size(void) const {
 	return this->numElem;
 }
 
@@ -127,7 +127,7 @@ typename Tree<T>::const_iterator Tree<T>::find(const typename Tree<T>::const_ite
 }
 
 template <typename T>
-int Tree<T>::count(const T &data) const {
+size_t Tree<T>::count(const T &data) const {
 	int rv=0;
 	for (Tree<T>::const_iterator iter=this->cbegin(); iter!=this->cend(); iter++){
 		(*iter==data)? rv++: 0;
