@@ -54,6 +54,11 @@ typename Tree<T>::iterator Tree<T>::begin(bool revisit){
 }
 
 template <typename T>
+const typename Tree<T>::const_iterator Tree<T>::begin(bool revisit) const {
+	return Tree<T>::const_iterator(this->headNode,revisit);
+}
+
+template <typename T>
 typename Tree<T>::const_iterator Tree<T>::cbegin(bool revisit) const {
 	return Tree<T>::const_iterator(this->headNode,revisit);
 }
@@ -61,6 +66,11 @@ typename Tree<T>::const_iterator Tree<T>::cbegin(bool revisit) const {
 template <typename T>
 typename Tree<T>::iterator Tree<T>::end(void){
 	return Tree<T>::iterator();
+}
+
+template <typename T>
+const typename Tree<T>::const_iterator Tree<T>::end(void) const {
+	return Tree<T>::const_iterator();
 }
 
 template <typename T>

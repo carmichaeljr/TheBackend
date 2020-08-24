@@ -5,15 +5,47 @@
 
 XMLFile::XMLFile(const std::string &path):
 	File(path) {
-	//this->clear();
 	this->parseFile();
 }
 
-//void XMLFile::setSource(const std::string &path){
-//	if (File::fileExists(path)){
-//		File::setPath(path);
-//		//this->clear();
-//		this->parseFile();
+void XMLFile::setSource(const std::string &path){
+	if (File::fileExists(path)){
+		File::setPath(path);
+		TreePassThrough::clear();
+		this->parseFile();
+	}
+}
+
+XMLFile::iterator XMLFile::begin(bool revisit){
+	return TreePassThrough::begin(revisit);
+}
+const XMLFile::const_iterator XMLFile::begin(bool revisit) const {
+	return TreePassThrough::begin(revisit);
+}
+XMLFile::const_iterator XMLFile::cbegin(bool revisit) const {
+	return TreePassThrough::cbegin(revisit);
+}
+
+XMLFile::iterator XMLFile::end(void){
+	return TreePassThrough::end();
+}
+const XMLFile::const_iterator XMLFile::end(void) const {
+	return TreePassThrough::end();
+}
+XMLFile::const_iterator XMLFile::cend(void) const {
+	return TreePassThrough::cend();
+}
+
+//void XMLFile::write(void){
+//	int indent=0;
+//	std::stack<XMLTag> tagStack;
+//	for (XMLFile::const_iterator iter=this->cbegin(true); iter!=this->cend(); iter++){
+//		if (*iter==tagStack.top()){
+//			//move up
+//		} else {
+//
+//		}
+//
 //	}
 //}
 
@@ -23,11 +55,13 @@ XMLFile::XMLFile(const std::string &path):
 //	std::cout << "Clearing file?????" << std::endl;
 //}
 
+//Private Methods==============================================================
 void XMLFile::parseFile(void){
 	Tokenizer tokenizer;
 	tokenizer.addInclusionTokens("\"\"");
 	tokenizer.addSplitTokens("<>/");
-	Tree<XMLTag>::iterator tagIter=TreePassThrough::end(); //Will need to place at start upon adding first node
+	//Will need to place at start upon adding first node
+	Tree<XMLTag>::iterator tagIter=TreePassThrough::end(); 
 	for (File::const_iterator iter=File::cbegin(); iter!=File::cend(); iter++){
 		std::string line=*iter;
 		HelperFunc::trimWhitespace(line);

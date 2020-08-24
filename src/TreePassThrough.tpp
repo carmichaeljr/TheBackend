@@ -25,12 +25,22 @@ typename Tree<T>::iterator TreePassThrough<T>::begin(bool revisit){
 }
 
 template <typename T>
+const typename Tree<T>::const_iterator TreePassThrough<T>::begin(bool revisit) const {
+	return this->ptTree.begin(revisit);
+}
+
+template <typename T>
 typename Tree<T>::const_iterator TreePassThrough<T>::cbegin(bool revisit) const {
 	return this->ptTree.cbegin(revisit);
 }
 
 template <typename T>
 typename Tree<T>::iterator TreePassThrough<T>::end(void){
+	return this->ptTree.end();
+}
+
+template <typename T>
+const typename Tree<T>::const_iterator TreePassThrough<T>::end(void) const {
 	return this->ptTree.end();
 }
 

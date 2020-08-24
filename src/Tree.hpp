@@ -47,8 +47,10 @@ class Tree {
 		size_t size(void) const;
 		bool empty(void) const;
 		Tree<T>::iterator begin(bool revisit=false);
+		const Tree<T>::const_iterator begin(bool revisit=false) const;
 		Tree<T>::const_iterator cbegin(bool revisit=false) const;
 		Tree<T>::iterator end(void);
+		const Tree<T>::const_iterator end(void) const;
 		Tree<T>::const_iterator cend(void) const;
 		Tree<T>::iterator emplace(const T &data);
 		Tree<T>::iterator emplace(const Tree<T>::iterator &sibling, const T &data);

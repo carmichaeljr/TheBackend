@@ -5,19 +5,19 @@
 
 template <typename T>
 class VectorPassThrough {
-	//using iterator=std::vector<T>::iterator;
-	//using const_iterator=std::vector<T>::const_iterator;
+	using iterator=typename std::vector<T>::iterator;
+	using const_iterator=typename std::vector<T>::const_iterator;
 	public:
 		VectorPassThrough(void);
 		explicit VectorPassThrough(const std::vector<T> &data);
 		size_t max_size(void) const;
-		void assign(typename std::vector<T>::iterator &first, typename std::vector<T>::iterator &last);
+		void assign(iterator &first, iterator &last);
 		void assign(size_t n, const T &val);
-		typename std::vector<T>::iterator emplace(typename std::vector<T>::iterator &pos, const T &data);
-		typename std::vector<T>::iterator emplace(typename std::vector<T>::const_iterator &pos, const T &data);
-		typename std::vector<T>::iterator emplace_back(const T &data);
-		typename std::vector<T>::iterator insert(typename std::vector<T>::const_iterator &pos, const T &val);
-		typename std::vector<T>::iterator insert(typename std::vector<T>::const_iterator &pos, size_t n, const T &val);
+		iterator emplace(iterator &pos, const T &data);
+		iterator emplace(const_iterator &pos, const T &data);
+		iterator emplace_back(const T &data);
+		iterator insert(const_iterator &pos, const T &val);
+		iterator insert(const_iterator &pos, size_t n, const T &val);
 		//Does not have range, move, or initializer list insert methods
 		void push_back(const T &val);
 		void push_back(const T &&val);
@@ -35,15 +35,15 @@ class VectorPassThrough {
 		const T& back(void) const;
 		T* data(void);
 		const T* data(void) const;
-		typename std::vector<T>::iterator begin(void);
-		const typename std::vector<T>::const_iterator begin(void) const;
-		typename std::vector<T>::iterator end(void);
-		const typename std::vector<T>::const_iterator end(void) const;
-		typename std::vector<T>::const_iterator cbegin(void) const;
-		typename std::vector<T>::const_iterator cend(void) const;
+		iterator begin(void);
+		const const_iterator begin(void) const;
+		iterator end(void);
+		const const_iterator end(void) const;
+		const_iterator cbegin(void) const;
+		const_iterator cend(void) const;
 		void swap(std::vector<T> &other);
-		typename std::vector<T>::iterator erase(typename std::vector<T>::iterator &pos);
-		typename std::vector<T>::iterator erase(typename std::vector<T>::iterator &first, typename std::vector<T>::iterator &last);
+		iterator erase(iterator &pos);
+		iterator erase(iterator &first, iterator &last);
 		void pop_back(void);
 		void shrink_to_fit(void);
 		bool empty(void) const;

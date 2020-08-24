@@ -3,8 +3,8 @@
 
 //setSource
 //write
-//iter access
-//GT "pass-through" functions
+//clear
+//equals
 
 #include <string>
 #include "src/File.hpp"
@@ -15,8 +15,18 @@
 
 class XMLFile: public File, public TreePassThrough<XMLTag> {
 	public:
+		typedef Tree<XMLTag>::iterator iterator;
+		typedef Tree<XMLTag>::const_iterator const_iterator;
+	public:
 		explicit XMLFile(const std::string &path);
-		//void setSource(const std::string &path);
+		void setSource(const std::string &path);
+		//begin/end methods are declared here to resolve inheritance ambiguity
+		iterator begin(bool revisit=false);
+		const const_iterator begin(bool revisit=false) const;
+		const_iterator cbegin(bool revisit=false) const;
+		iterator end(void);
+		const const_iterator end(void) const;
+		const_iterator cend(void) const;
 		//void clear(void);
 	private:
 		void parseFile(void);
